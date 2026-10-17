@@ -1,6 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="8" fill="#0F172A"/>
-  <path d="M7 11C7 9.89543 7.89543 9 9 9H23C24.1046 9 25 9.89543 25 11V13C25 14.1046 24.1046 15 23 15H21V19C21 21.2091 19.2091 23 17 23H15C12.7909 23 11 21.2091 11 19V15H9C7.89543 15 7 14.1046 7 13V11Z" fill="#3B82F6"/>
-  <path d="M13 14H19V18C19 19.1046 18.1046 20 17 20H15C13.8954 20 13 19.1046 13 18V14Z" fill="#FAF9F5"/>
-  <circle cx="16" cy="11.5" r="1.5" fill="#FAF9F5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <!-- Dark Obsidian Navy Rounded Squircle Background -->
+  <rect width="128" height="128" rx="28" fill="#080E24"/>
+  
+  <!-- Stylized Alliet Architectural 'A' Geometry -->
+  <g id="alliet-symbol">
+    <!-- Main White Architectural 'A' Frame with Chamfered Apex -->
+    <path 
+      d="M64 22 C67.5 22 70.5 24 72.5 27.5 L108 89 C110.5 93.5 107.5 99 102 99 H83 C80 99 77.5 97.5 76 95 L64 74 L52 95 C50.5 97.5 48 99 45 99 H26 C20.5 99 17.5 93.5 20 89 L55.5 27.5 C57.5 24 60.5 22 64 22 Z" 
+      fill="#FFFFFF"
+    />
+    
+    <!-- Signature Electric Cobalt Blue Inner Fold / Accent -->
+    <path 
+      d="M48 88 L64 60 L78 84 C71 85 58 87 48 88 Z" 
+      fill="url(#blue-facet-grad)"
+    />
+    
+    <!-- Subtle secondary bevel shadow -->
+    <path 
+      d="M48 88 C43 88.5 35 91 30 94 L50 60 L56 70 Z" 
+      fill="#1D4ED8" 
+      opacity="0.9"
+    />
+  </g>
+
+  <!-- Gradient Definitions -->
+  <defs>
+    <linearGradient id="blue-facet-grad" x1="48" y1="60" x2="78" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="60%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
 </svg>

@@ -347,17 +347,26 @@ export const InterviewPrepView: React.FC<InterviewPrepViewProps> = ({
       </div>
 
       {/* Bottom CTA */}
-      <div className="pt-6 border-t border-[#E2E0D8] flex items-center justify-between">
+      <div className="pt-6 border-t border-[#E2E0D8] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <p className="text-xs text-ink-600">
           Interview questions mastered. Proceed to prioritized action checklist.
         </p>
         <button
           onClick={onProceedToChecklist}
           disabled={isLoadingChecklist}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-xs font-bold bg-ink-950 text-white hover:bg-ink-900 shadow-card transition-all"
+          className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg text-xs font-bold bg-ink-950 text-white hover:bg-ink-900 shadow-card transition-all disabled:opacity-70 disabled:cursor-not-allowed min-w-[200px]"
         >
-          <span>Continue to Preparation Plan</span>
-          <ArrowRight className="w-4 h-4" />
+          {isLoadingChecklist ? (
+            <>
+              <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin shrink-0" />
+              <span className="truncate">{loadingStepText || 'Generating Preparation Plan...'}</span>
+            </>
+          ) : (
+            <>
+              <span>Continue to Preparation Plan</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
+            </>
+          )}
         </button>
       </div>
     </div>

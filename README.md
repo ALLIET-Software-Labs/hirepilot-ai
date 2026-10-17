@@ -1,7 +1,12 @@
 # ApplyForge AI — Premium AI Career Preparation Platform
+### Built by [Alliet Software Labs](https://alliet.company/)
 
-> **A focused, privacy-first career copilot powered by 100% on-device local AI.**  
-> Transform any job description into an ATS-aligned resume, verified company research, role-specific interview answers, and an actionable 0–100% preparation checklist without sending your career data to the cloud.
+> **An open-source, privacy-first career copilot powered by 100% on-device local AI.**  
+> Transform any job description into an ATS-aligned resume, verified company research, role-specific interview answers, and an actionable 0–100% preparation checklist without sending sensitive career data to the cloud.
+>
+> **Website:** [https://alliet.company/](https://alliet.company/)  
+> **Contact:** [contact@alliet.company](mailto:contact@alliet.company)  
+> **Emblem & Identity:** Open-Source Release by Alliet Software Labs
 
 ---
 
@@ -157,3 +162,15 @@ ApplyForge AI/
 - **Initial Inference Warm-up:** On cold boot, loading `gemma3:4b` weights into memory may take 15–30 seconds. Subsequent generations are fast (~10–20 seconds).
 - **ATS Disclaimer:** Keyword match coverage is a heuristic alignment estimation. ApplyForge AI never claims a resume is "guaranteed" to pass automated screening.
 - **Checklist 100% Completion:** Achieving 100% on the preparation checklist indicates the candidate has reviewed all planned topics and exercises; it does not measure or guarantee live interview performance.
+
+---
+
+## 9. Credits & Maintainers
+
+**ApplyForge AI** is proudly created and open-sourced by **[Alliet Software Labs](https://alliet.company/)**.
+
+- **Organization:** Alliet Software Labs
+- **Official Website:** [https://alliet.company/](https://alliet.company/)
+- **Inquiries & Support:** [contact@alliet.company](mailto:contact@alliet.company)
+- **License:** Open Source under the MIT License
+

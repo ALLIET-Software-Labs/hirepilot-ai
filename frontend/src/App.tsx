@@ -456,26 +456,81 @@ export function App() {
         )}
       </main>
 
-      {/* Editorial Footer (Hidden on print) */}
-      <footer className="no-print border-t border-[#E2E0D8] bg-white py-6 mt-12 text-xs text-ink-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-heading font-bold text-ink-950">ApplyForge AI</span>
-            <span>·</span>
-            <span>100% Local Inference Career Copilot</span>
+      {/* Editorial Footer with Alliet Software Labs Credits (Hidden on print) */}
+      <footer className="no-print border-t border-[#E2E0D8] bg-white py-8 mt-16 text-xs text-ink-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            {/* Left: Brand & Alliet Attribution */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+              <a 
+                href="https://alliet.company/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 p-1.5 -m-1.5 rounded-lg hover:bg-[#FAF9F5] transition-colors"
+                title="Visit Alliet Software Labs"
+              >
+                <img 
+                  src="/alliet-emblem.jpg" 
+                  alt="Alliet Software Labs" 
+                  className="w-9 h-9 rounded-lg object-cover shadow-xs border border-ink-950/10 group-hover:scale-105 transition-transform" 
+                />
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-heading font-extrabold text-sm text-ink-950 tracking-tight">
+                      Alliet Software Labs
+                    </span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-ink-100 text-ink-700 font-semibold">
+                      Open Source
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-ink-500 block">
+                    Engineering intelligence platforms & developer tools
+                  </span>
+                </div>
+              </a>
+            </div>
+
+            {/* Right: Quick Links, Contact, and Privacy Diagnostics */}
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-ink-600">
+              <a 
+                href="https://alliet.company/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="font-medium hover:text-cobalt-600 transition-colors"
+              >
+                alliet.company
+              </a>
+              <span className="text-ink-300">·</span>
+              <a 
+                href="mailto:contact@alliet.company" 
+                className="font-medium hover:text-cobalt-600 transition-colors"
+                title="Send inquiry to Alliet Software Labs"
+              >
+                contact@alliet.company
+              </a>
+              <span className="text-ink-300">·</span>
+              <button
+                onClick={() => setIsHealthModalOpen(true)}
+                className="font-medium hover:text-cobalt-600 transition-colors"
+              >
+                Model & Privacy Diagnostics
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-6 text-[11px] text-ink-600">
-            <button
-              onClick={() => setIsHealthModalOpen(true)}
-              className="hover:text-cobalt-600 transition-colors"
-            >
-              Model & Privacy Diagnostics
-            </button>
-            <span>·</span>
-            <span>Ollama gemma3:4b</span>
-            <span>·</span>
-            <span>No Cloud Data Retention</span>
+          {/* Sub-footer Bar */}
+          <div className="border-t border-[#F4F3EE] pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-ink-400">
+            <p>
+              ApplyForge AI is an open-source project created by <a href="https://alliet.company/" target="_blank" rel="noopener noreferrer" className="font-semibold text-ink-700 hover:text-cobalt-600 transition-colors">Alliet Software Labs</a>.
+            </p>
+            <p className="flex items-center gap-2">
+              <span>Local Ollama (gemma3:4b)</span>
+              <span>·</span>
+              <span>Zero Cloud Data Retention</span>
+              <span>·</span>
+              <span>Private & ATS-Compliant</span>
+            </p>
           </div>
         </div>
       </footer>

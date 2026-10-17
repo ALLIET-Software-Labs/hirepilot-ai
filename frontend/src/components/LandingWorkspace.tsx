@@ -36,9 +36,22 @@ export const LandingWorkspace: React.FC<LandingWorkspaceProps> = ({
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14">
       {/* Hero Section */}
       <div className="text-center max-w-3xl mx-auto space-y-5">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cobalt-50 text-cobalt-700 border border-cobalt-200">
-          <Lock className="w-3.5 h-3.5 text-cobalt-600" />
-          <span>Local-First Private AI · Zero Cloud Telemetry</span>
+        <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-full text-xs font-semibold bg-white text-ink-800 border border-[#E2E0D8] shadow-xs">
+          <a 
+            href="https://alliet.company/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-ink-900 hover:text-cobalt-600 transition-colors"
+            title="Alliet Software Labs"
+          >
+            <img src="/alliet-emblem.jpg" alt="Alliet" className="w-3.5 h-3.5 rounded object-cover" />
+            <span>Built by Alliet Software Labs</span>
+          </a>
+          <span className="text-ink-300">·</span>
+          <span className="text-cobalt-700 flex items-center gap-1">
+            <Lock className="w-3 h-3 text-cobalt-600" />
+            100% Local Private AI
+          </span>
         </div>
 
         <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-ink-950 tracking-tight leading-[1.15]">
@@ -277,6 +290,41 @@ export const LandingWorkspace: React.FC<LandingWorkspaceProps> = ({
             <p className="text-xs text-ink-600 leading-relaxed">
               Prioritized checklist covering technical gaps, architecture concepts, and behavioral scenarios to track your readiness.
             </p>
+          </div>
+        </div>
+
+        {/* Alliet Software Labs Open Source Showcase */}
+        <div className="mt-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-[#080E24] to-[#121B3B] text-white shadow-card flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 max-w-xl text-center md:text-left">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-white/10 text-white border border-white/15">
+              <span>Open Source Platform</span>
+              <span>·</span>
+              <span className="text-cobalt-300">Alliet Software Labs</span>
+            </div>
+            <h4 className="font-heading text-xl sm:text-2xl font-extrabold tracking-tight">
+              Built for Candidate Privacy & Real Results
+            </h4>
+            <p className="text-xs sm:text-sm text-ink-200 leading-relaxed font-normal">
+              ApplyForge AI is engineered and maintained by <strong>Alliet Software Labs</strong>. We believe your career history and interview preparation should remain 100% private and on your device.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+            <a
+              href="https://alliet.company/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2.5 rounded-xl text-xs font-bold bg-white text-ink-950 hover:bg-ink-100 transition-all shadow-subtle flex items-center gap-2"
+            >
+              <span>Visit alliet.company</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="mailto:contact@alliet.company"
+              className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-all"
+            >
+              contact@alliet.company
+            </a>
           </div>
         </div>
       </div>

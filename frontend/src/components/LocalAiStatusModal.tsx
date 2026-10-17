@@ -121,6 +121,44 @@ export const LocalAiStatusModal: React.FC<LocalAiStatusModalProps> = ({
             </p>
           </div>
 
+          {/* Open Source Maintainer & Support Card */}
+          <div className="p-3.5 rounded-xl border border-[#E2E0D8] bg-[#FAF9F5] space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <img 
+                  src="/alliet-emblem.jpg" 
+                  alt="Alliet Software Labs" 
+                  className="w-5 h-5 rounded object-cover shadow-xs border border-ink-900/10"
+                />
+                <span className="font-bold text-ink-950 text-xs">Built by Alliet Software Labs</span>
+              </div>
+              <span className="text-[10px] font-mono text-ink-500 bg-white px-1.5 py-0.5 rounded border border-[#E2E0D8]">
+                Open Source
+              </span>
+            </div>
+            <p className="text-[11px] text-ink-600 leading-relaxed font-normal">
+              ApplyForge AI is engineered and maintained by Alliet Software Labs as a community career intelligence tool.
+            </p>
+            <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px]">
+              <a 
+                href="https://alliet.company/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="font-semibold text-cobalt-700 hover:text-cobalt-800 flex items-center gap-1"
+              >
+                <span>https://alliet.company/</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+              <span className="text-ink-300">·</span>
+              <a 
+                href="mailto:contact@alliet.company"
+                className="font-semibold text-ink-700 hover:text-ink-950"
+              >
+                contact@alliet.company
+              </a>
+            </div>
+          </div>
+
           {/* Troubleshooting Guide if Offline */}
           {!isModelReady && (
             <div className="p-3 rounded-lg bg-[#FAF9F5] border border-[#E2E0D8] text-[11px] space-y-1.5 font-mono text-ink-800">
