@@ -289,6 +289,132 @@ Generate an ATS-optimized resume. Return pure JSON with this exact structure:
     return extract_json_from_response(raw_response)
 
 
+def build_grounded_interview_fallback(
+    job_description: str,
+    resume_text: str,
+    company_name: str = "",
+    job_title: str = "",
+    research_summary: Dict[str, Any] = None
+) -> Dict[str, Any]:
+    """Generate high-quality grounded interview preparation questions as a reliable fallback."""
+    comp = company_name or "the target company"
+    role = job_title or "Target Role"
+
+    # Identify primary tech keywords
+    skills = []
+    for s in ["Python", "JavaScript", "TypeScript", "React", "Node.js", "PostgreSQL", "SQL", "AWS", "Docker", "REST API", "System Design", "Git"]:
+        if s.lower() in job_description.lower() or s.lower() in resume_text.lower():
+            skills.append(s)
+    if not skills:
+        skills = ["System Architecture", "API Design", "Database Optimization", "Clean Code"]
+
+    primary_tech = skills[0] if skills else "Core Technologies"
+    secondary_tech = skills[1] if len(skills) > 1 else "Modern Frameworks"
+
+    company_q = f"How would you apply your technical background to solve core engineering and product scale challenges at {comp}?"
+    if research_summary and research_summary.get("sources"):
+        sample_title = research_summary["sources"][0].get("title", "")
+        if sample_title:
+            company_q = f"Based on recent initiatives at {comp} ({sample_title}), how does your engineering background position you to contribute?"
+
+    return {
+        "categories": [
+            {
+                "category_name": "Technical Fundamentals",
+                "description": "Core engineering principles and foundational technical concepts",
+                "questions": [
+                    {
+                        "id": "tf-1",
+                        "question": f"Explain the core architectural principles and execution model of {primary_tech}. What trade-offs do you consider when designing with it?",
+                        "why_asked": f"Evaluates depth of mastery in {primary_tech} rather than superficial syntax knowledge.",
+                        "suggested_answer": f"Structure your response around fundamental design: discuss asynchronous I/O or state flow, memory management, and how {primary_tech} handles concurrency. Compare it against common alternatives, noting where it excels (e.g. developer ergonomics, ecosystem) versus its operational overhead.",
+                        "concepts_to_revise": [f"{primary_tech} Internals", "Concurrency", "Memory Management"],
+                        "source_citation": "JD Core Requirement"
+                    },
+                    {
+                        "id": "tf-2",
+                        "question": "How do you approach database schema indexing and query optimization when handling high-concurrency read/write workloads?",
+                        "why_asked": "Assesses back-end and data modeling maturity in real-world production settings.",
+                        "suggested_answer": "Discuss B-Tree and hash indexing, explain composite index column ordering, and mention analyzing EXPLAIN ANALYZE execution plans. Highlight connection pooling, read replicas, and caching layers (e.g. Redis) to alleviate database bottlenecks.",
+                        "concepts_to_revise": ["Query Optimization", "Indexing Strategies", "Connection Pooling"],
+                        "source_citation": "System Architecture Benchmark"
+                    }
+                ]
+            },
+            {
+                "category_name": "JD-Specific Skills",
+                "description": f"Targeted requirements for {role}",
+                "questions": [
+                    {
+                        "id": "jd-1",
+                        "question": f"In {secondary_tech}, how do you structure components or services to ensure testability, high maintainability, and clean separation of concerns?",
+                        "why_asked": f"Directly verifies practical expertise in {secondary_tech} as demanded by the job posting.",
+                        "suggested_answer": f"Outline your preferred pattern: single responsibility principle, decoupled business logic, and modular boundaries. Describe automated unit and integration testing strategies that prevent regression without excessive mocking.",
+                        "concepts_to_revise": [f"{secondary_tech} Best Practices", "Clean Architecture", "Automated Testing"],
+                        "source_citation": "Job Description Priority"
+                    }
+                ]
+            },
+            {
+                "category_name": "Projects & Experience",
+                "description": "Grounded exploration of your verified background and engineering accomplishments",
+                "questions": [
+                    {
+                        "id": "pe-1",
+                        "question": "Walk me through the most technically challenging project on your resume. What was your specific architectural contribution and what measurable impact did it achieve?",
+                        "why_asked": "Assesses ownership, problem decomposition, and ability to articulate engineering trade-offs.",
+                        "suggested_answer": "Use the STAR method: (Situation) Frame the business problem and constraints; (Task) Define your specific ownership; (Action) Detail the technical decisions, architecture, and roadblocks you overcame; (Result) Quantify the outcome (e.g., latency reduction, uptime, user scale, or team efficiency).",
+                        "concepts_to_revise": ["STAR Framework", "Architecture Walkthrough", "Measurable Metrics"],
+                        "source_citation": "Resume Experience Deep-Dive"
+                    }
+                ]
+            },
+            {
+                "category_name": "Problem Solving & Scenarios",
+                "description": "Live architectural, scalability, and incident response scenarios",
+                "questions": [
+                    {
+                        "id": "ps-1",
+                        "question": "A critical customer-facing API endpoint begins experiencing intermittent 504 gateway timeouts under peak load. Walk me through your methodical debugging and remediation process.",
+                        "why_asked": "Tests production debugging discipline, telemetry understanding, and incident response.",
+                        "suggested_answer": "Step 1: Check monitoring metrics (error rate spikes, p99 latency, CPU/memory saturation, connection pool exhaustion). Step 2: Correlate logs with recent deployments. Step 3: Identify whether the bottleneck is database lock contention, slow downstream dependency, or memory leaks. Step 4: Apply mitigation (scale replicas, enable circuit breaker) and formulate a post-mortem with preventative actions.",
+                        "concepts_to_revise": ["Observability & APM", "Root Cause Analysis", "Circuit Breakers"],
+                        "source_citation": "Production Reliability Scenario"
+                    }
+                ]
+            },
+            {
+                "category_name": "Behavioral & Leadership",
+                "description": "Collaboration, conflict resolution, and technical decision making",
+                "questions": [
+                    {
+                        "id": "bh-1",
+                        "question": "Tell me about a time you strongly disagreed with a technical direction or architectural decision proposed by a peer or manager. How did you navigate the conversation?",
+                        "why_asked": "Evaluates emotional intelligence, constructive communication, and commitment to collective team goals.",
+                        "suggested_answer": "Focus on data and objective criteria: describe framing the disagreement around trade-offs (scalability vs delivery velocity) rather than personal preference. Conclude with how you reached consensus or committed fully to the agreed decision.",
+                        "concepts_to_revise": ["Constructive Conflict", "Data-Driven Trade-offs", "Disagree and Commit"],
+                        "source_citation": "Behavioral Evaluation"
+                    }
+                ]
+            },
+            {
+                "category_name": "Company-Specific Topics",
+                "description": f"Alignment with {comp}'s mission, technical domain, and product challenges",
+                "questions": [
+                    {
+                        "id": "co-1",
+                        "question": company_q,
+                        "why_asked": f"Tests genuine interest, company research preparation, and domain enthusiasm for {comp}.",
+                        "suggested_answer": f"Express clear understanding of {comp}'s core platform and business model. Connect your verified technical strengths to problems {comp} solves at scale, highlighting how your experience reduces onboarding friction and delivers immediate value.",
+                        "concepts_to_revise": [f"{comp} Overview", "Domain Scalability", "Value Proposition"],
+                        "source_citation": "Verified Company Research" if (research_summary and research_summary.get("has_research")) else "Company Domain Fit"
+                    }
+                ]
+            }
+        ]
+    }
+
+
 async def generate_interview_preparation(
     job_description: str,
     resume_text: str,
@@ -302,16 +428,16 @@ async def generate_interview_preparation(
         snippets = []
         for s in research_summary.get("overview_snippets", []) + research_summary.get("interview_snippets", []):
             snippets.append(f"- [{s.get('title')}] {s.get('snippet')} (URL: {s.get('url')})")
-        research_snippets_text = "\n".join(snippets[:6])
+        research_snippets_text = "\n".join(snippets[:5])
 
     system_prompt = (
-        "You are an elite technical interview coach and hiring manager. "
-        "Generate realistic, high-value interview questions and suggested answers. "
+        "You are an elite technical interview coach. "
+        "Generate realistic interview questions and suggested answers. "
         "GROUNDING RULES:\n"
         "1. For personal/experience questions, provide structured response frameworks (e.g. STAR method) tailored to candidate's verified resume, rather than inventing fictional stories.\n"
-        "2. If verified company research is provided, include company-specific and reported questions citing the source.\n"
-        "3. Explain WHY interviewers ask each question so candidates understand the underlying assessment criteria.\n"
-        "4. Respond with pure valid JSON only."
+        "2. If verified company research is provided, ground company questions in that research.\n"
+        "3. Explain WHY interviewers ask each question.\n"
+        "4. Respond with pure valid JSON only without markdown commentary."
     )
 
     prompt = f"""
@@ -320,29 +446,29 @@ COMPANY: {company_name or 'Target Company'}
 
 JOB DESCRIPTION:
 \"\"\"
-{job_description[:3000]}
+{job_description[:2500]}
 \"\"\"
 
 CANDIDATE CONFIRMED BACKGROUND:
 \"\"\"
-{resume_text[:3000]}
+{resume_text[:2500]}
 \"\"\"
 
-VERIFIED WEB RESEARCH & REPORTED INTERVIEW EXPERIENCES:
-{research_snippets_text if research_snippets_text else 'No specific company web snippets available. Ground strictly in JD requirements.'}
+VERIFIED WEB RESEARCH:
+{research_snippets_text if research_snippets_text else 'None available. Ground strictly in JD.'}
 
-Generate comprehensive interview questions across all 6 core categories. Return pure JSON with this structure:
+Generate interview questions across core categories. Return pure JSON with this exact schema:
 {{
   "categories": [
     {{
       "category_name": "Technical Fundamentals",
-      "description": "Foundational engineering concepts required for this level",
+      "description": "Foundational engineering concepts",
       "questions": [
         {{
-          "id": "tf1",
-          "question": "Question text",
-          "why_asked": "Interviewer intention and what they evaluate",
-          "suggested_answer": "Clear, technically sound suggested answer",
+          "id": "tf-1",
+          "question": "Question text here?",
+          "why_asked": "Assessment intent",
+          "suggested_answer": "Structured suggested answer",
           "concepts_to_revise": ["Concept 1", "Concept 2"],
           "source_citation": "JD Core Requirement"
         }}
@@ -350,34 +476,101 @@ Generate comprehensive interview questions across all 6 core categories. Return 
     }},
     {{
       "category_name": "JD-Specific Skills",
-      "description": "Questions evaluating direct qualifications from the job description",
-      "questions": [...]
+      "description": "Direct qualifications from JD",
+      "questions": [
+        {{
+          "id": "jd-1",
+          "question": "Question text here?",
+          "why_asked": "Assessment intent",
+          "suggested_answer": "Structured suggested answer",
+          "concepts_to_revise": ["Concept A"],
+          "source_citation": "JD Skill"
+        }}
+      ]
     }},
     {{
       "category_name": "Projects & Experience",
-      "description": "Deep-dives into candidate verified resume projects and achievements",
-      "questions": [...]
+      "description": "Candidate verified accomplishments",
+      "questions": [
+        {{
+          "id": "pe-1",
+          "question": "Question text here?",
+          "why_asked": "Assessment intent",
+          "suggested_answer": "STAR framework answer",
+          "concepts_to_revise": ["Project Architecture"],
+          "source_citation": "Resume Experience"
+        }}
+      ]
     }},
     {{
-      "category_name": "Problem Solving & System Scenarios",
-      "description": "Architectural, debugging, and real-world scenario challenges",
-      "questions": [...]
-    }},
-    {{
-      "category_name": "Behavioral & Culture Fit",
-      "description": "STAR-format questions on collaboration, conflict, and ownership",
-      "questions": [...]
-    }},
-    {{
-      "category_name": "Company-Specific Topics",
-      "description": "Questions grounded in company mission, tech stack, or reported interview patterns",
-      "questions": [...]
+      "category_name": "Behavioral & Company Topics",
+      "description": "Culture and company alignment",
+      "questions": [
+        {{
+          "id": "bc-1",
+          "question": "Question text here?",
+          "why_asked": "Assessment intent",
+          "suggested_answer": "STAR framework answer",
+          "concepts_to_revise": ["Communication"],
+          "source_citation": "Company Fit"
+        }}
+      ]
     }}
   ]
 }}
 """
-    raw_response = await call_ollama(prompt, system_prompt=system_prompt, temperature=0.2)
-    return extract_json_from_response(raw_response)
+    try:
+        raw_response = await call_ollama(prompt, system_prompt=system_prompt, temperature=0.2)
+        parsed = extract_json_from_response(raw_response)
+        if isinstance(parsed, dict) and parsed.get("categories") and len(parsed["categories"]) > 0:
+            return parsed
+        # If parsed has no categories, fall back
+        return build_grounded_interview_fallback(job_description, resume_text, company_name, job_title, research_summary)
+    except Exception as e:
+        print(f"[Interview Prep LLM Error]: {e}. Using grounded fallback generator.")
+        return build_grounded_interview_fallback(job_description, resume_text, company_name, job_title, research_summary)
+
+
+def build_grounded_checklist_fallback(job_description: str, gaps: List[Dict[str, Any]] = None, company_name: str = "") -> Dict[str, Any]:
+    items = []
+    idx = 1
+    if gaps:
+        for g in gaps[:4]:
+            skill = g.get("skill_or_requirement", "Key Competency")
+            importance = g.get("importance", "High")
+            items.append({
+                "id": f"chk-{idx}",
+                "topic": f"{skill} Mastery & Real-World Application",
+                "priority": importance,
+                "category": "Target Role Gap",
+                "why_it_matters": f"Identified as a critical qualification for {company_name or 'the role'}.",
+                "concepts_to_study": [f"{skill} fundamentals", "Production patterns", "Performance optimization"],
+                "practical_task": f"Build a small working prototype demonstrating {skill} with automated unit tests.",
+                "completed": False
+            })
+            idx += 1
+
+    standard_topics = [
+        ("System Architecture & Scalability", "High", "Architecture & System Design", "Design scalable decoupled services with caching and resilient APIs.", ["Caching Strategies", "Load Balancing", "Database Sharding"], "Diagram a high-throughput architecture on paper addressing single points of failure."),
+        ("Data Modeling & Query Optimization", "Medium", "Technical Core", "Essential for maintaining low latency under high transaction volumes.", ["B-Tree Indexes", "Execution Plans", "Connection Pooling"], "Analyze a slow query using EXPLAIN ANALYZE and implement optimal composite indexes."),
+        ("STAR Behavioral Stories", "Medium", "Behavioral & Culture", "Evaluates team ownership, cross-functional collaboration, and communication.", ["STAR Method", "Incident Post-Mortems", "Constructive Conflict"], "Write down 3 structured STAR narratives detailing high-stakes project deliverables."),
+        ("Security & API Defensive Standards", "Low", "Technical Core", "Required to prevent vulnerabilities in production endpoints.", ["OWASP Top 10", "Input Sanitization", "Rate Limiting"], "Review an existing codebase and audit endpoints for authentication and SQL injection vulnerabilities.")
+    ]
+
+    for topic, prio, cat, why, concepts, task in standard_topics:
+        items.append({
+            "id": f"chk-{idx}",
+            "topic": topic,
+            "priority": prio,
+            "category": cat,
+            "why_it_matters": why,
+            "concepts_to_study": concepts,
+            "practical_task": task,
+            "completed": False
+        })
+        idx += 1
+
+    return {"checklist_items": items}
 
 
 async def generate_preparation_checklist(
@@ -413,15 +606,22 @@ Return pure JSON with this structure:
     {{
       "id": "chk-1",
       "topic": "Topic / Skill name (e.g., SQL Window Functions, Distributed Locking, RAG Pipeline Architecture)",
-      "priority": "High" | "Medium" | "Low",
-      "category": "Technical Core" | "Architecture & System Design" | "Domain / JD Skill" | "Behavioral & Culture",
+      "priority": "High",
+      "category": "Technical Core",
       "why_it_matters": "Direct explanation of why this role requires this knowledge",
       "concepts_to_study": ["Specific concept A", "Specific concept B", "Specific concept C"],
       "practical_task": "Concrete 30-60 min hands-on exercise or study task to test mastery",
       "completed": false
     }}
   ]
-}}
 """
-    raw_response = await call_ollama(prompt, system_prompt=system_prompt, temperature=0.2)
-    return extract_json_from_response(raw_response)
+
+    try:
+        raw_response = await call_ollama(prompt, system_prompt=system_prompt, temperature=0.2)
+        parsed = extract_json_from_response(raw_response)
+        if isinstance(parsed, dict) and parsed.get("checklist_items") and len(parsed["checklist_items"]) > 0:
+            return parsed
+        return build_grounded_checklist_fallback(job_description, gaps, company_name)
+    except Exception as e:
+        print(f"[Checklist LLM Error]: {e}. Using grounded fallback generator.")
+        return build_grounded_checklist_fallback(job_description, gaps, company_name)

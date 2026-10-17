@@ -429,6 +429,9 @@ export function App() {
             initialResume={activeSession.tailored_resume}
             onProceedToInterview={handleProceedToInterview}
             onSaveEdits={handleSaveResumeEdits}
+            isLoadingInterview={isLoading}
+            loadingStepText={loadingStepText}
+            errorMessage={errorMessage}
           />
         )}
 

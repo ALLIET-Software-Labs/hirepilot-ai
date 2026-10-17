@@ -13,7 +13,8 @@ import {
   Eye, 
   RotateCcw,
   Plus,
-  Trash2
+  Trash2,
+  Loader2
 } from 'lucide-react';
 import { TailoredResumeData } from '../types';
 import { api } from '../services/api';
@@ -22,12 +23,18 @@ interface ResumeStudioViewProps {
   initialResume: TailoredResumeData;
   onProceedToInterview: () => void;
   onSaveEdits: (updatedResume: TailoredResumeData) => void;
+  isLoadingInterview?: boolean;
+  loadingStepText?: string;
+  errorMessage?: string | null;
 }
 
 export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
   initialResume,
   onProceedToInterview,
   onSaveEdits,
+  isLoadingInterview = false,
+  loadingStepText = '',
+  errorMessage = null,
 }) => {
   const [resume, setResume] = useState<TailoredResumeData>(initialResume);
   const [isEditing, setIsEditing] = useState(false);
@@ -157,10 +164,24 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
 
           <button
             onClick={onProceedToInterview}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold bg-ink-950 text-white hover:bg-ink-900 transition-all shadow-card ml-2"
+            disabled={isLoadingInterview}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold shadow-card ml-2 transition-all ${
+              isLoadingInterview
+                ? 'bg-ink-800 text-white cursor-wait opacity-90'
+                : 'bg-ink-950 text-white hover:bg-ink-900'
+            }`}
           >
-            <span>Interview Prep</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            {isLoadingInterview ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-cobalt-400" />
+                <span>Preparing...</span>
+              </>
+            ) : (
+              <>
+                <span>Interview Prep</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -421,17 +442,44 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
       </div>
 
       {/* Bottom Floating Navigation (Hidden on Print) */}
-      <div className="no-print pt-6 border-t border-[#E2E0D8] flex items-center justify-between">
-        <p className="text-xs text-ink-600">
-          Tailored resume ready. Continue to company web research & role-specific interview preparation.
-        </p>
-        <button
-          onClick={onProceedToInterview}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-xs font-bold bg-ink-950 text-white hover:bg-ink-900 shadow-card transition-all"
-        >
-          <span>Continue to Interview Prep & Research</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+      <div className="no-print pt-6 border-t border-[#E2E0D8] space-y-3">
+        {errorMessage && (
+          <div className="p-3.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between gap-2 shadow-subtle animate-fadeIn">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <span className="font-medium">{errorMessage}</span>
+            </div>
+            <span className="text-[11px] text-rose-600 font-semibold underline cursor-pointer" onClick={onProceedToInterview}>
+              Retry
+            </span>
+          </div>
+        )}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-ink-600">
+            Tailored resume ready. Continue to company web research & role-specific interview preparation.
+          </p>
+          <button
+            onClick={onProceedToInterview}
+            disabled={isLoadingInterview}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-xs font-bold transition-all shadow-card ${
+              isLoadingInterview
+                ? 'bg-ink-800 text-white cursor-wait opacity-90'
+                : 'bg-ink-950 text-white hover:bg-ink-900 shadow-card-hover'
+            }`}
+          >
+            {isLoadingInterview ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-cobalt-400" />
+                <span>{loadingStepText || 'Generating Interview Questions with Local AI...'}</span>
+              </>
+            ) : (
+              <>
+                <span>Continue to Interview Prep & Research</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
