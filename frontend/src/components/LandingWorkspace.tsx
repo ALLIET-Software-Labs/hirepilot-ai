@@ -59,7 +59,7 @@ export const LandingWorkspace: React.FC<LandingWorkspaceProps> = ({
         </h1>
 
         <p className="text-base sm:text-lg text-ink-700 leading-relaxed font-normal">
-          ApplyForge AI analyzes your verified experience against target role requirements, crafts an ATS-optimized resume without fabricating skills, searches real interview reports, and creates an actionable 0–100% preparation checklist.
+          HirePilot AI analyzes your verified experience against target role requirements, crafts an ATS-optimized resume without fabricating skills, searches real interview reports, and creates an actionable 0–100% preparation checklist.
         </p>
 
         {/* Primary CTA Buttons */}
@@ -239,7 +239,7 @@ export const LandingWorkspace: React.FC<LandingWorkspaceProps> = ({
             Engineered for Grounded Accuracy
           </h3>
           <p className="text-xs sm:text-sm text-ink-600">
-            Unlike generic conversational AI, ApplyForge AI operates strictly on verified facts and proven recruiting standards.
+            Unlike generic conversational AI, HirePilot AI operates strictly on verified facts and proven recruiting standards.
           </p>
         </div>
 
@@ -305,7 +305,7 @@ export const LandingWorkspace: React.FC<LandingWorkspaceProps> = ({
               Built for Candidate Privacy & Real Results
             </h4>
             <p className="text-xs sm:text-sm text-ink-200 leading-relaxed font-normal">
-              ApplyForge AI is engineered and maintained by <strong>Alliet Software Labs</strong>. We believe your career history and interview preparation should remain 100% private and on your device.
+              HirePilot AI is engineered and maintained by <strong>Alliet Software Labs</strong>. We believe your career history and interview preparation should remain 100% private and on your device.
             </p>
           </div>
 

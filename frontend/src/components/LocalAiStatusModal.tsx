@@ -137,7 +137,7 @@ export const LocalAiStatusModal: React.FC<LocalAiStatusModalProps> = ({
               </span>
             </div>
             <p className="text-[11px] text-ink-600 leading-relaxed font-normal">
-              ApplyForge AI is engineered and maintained by Alliet Software Labs as a community career intelligence tool.
+              HirePilot AI is engineered and maintained by Alliet Software Labs as a community career intelligence tool.
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px]">
               <a 

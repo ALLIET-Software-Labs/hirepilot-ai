@@ -1,12 +1,14 @@
 import { ApplicationSession } from '../types';
 
-const STORAGE_KEY_SESSIONS = 'applyforge_sessions';
-const STORAGE_KEY_ACTIVE_ID = 'applyforge_active_session_id';
+const STORAGE_KEY_SESSIONS = 'hirepilot_sessions';
+const STORAGE_KEY_ACTIVE_ID = 'hirepilot_active_session_id';
+const LEGACY_STORAGE_KEY_SESSIONS = 'applyforge_sessions';
+const LEGACY_STORAGE_KEY_ACTIVE_ID = 'applyforge_active_session_id';
 
 export const storage = {
   getSessions: (): ApplicationSession[] => {
     try {
-      const data = localStorage.getItem(STORAGE_KEY_SESSIONS);
+      const data = localStorage.getItem(STORAGE_KEY_SESSIONS) || localStorage.getItem(LEGACY_STORAGE_KEY_SESSIONS);
       return data ? JSON.parse(data) : [];
     } catch {
       return [];
@@ -14,7 +16,7 @@ export const storage = {
   },
 
   getActiveSessionId: (): string | null => {
-    return localStorage.getItem(STORAGE_KEY_ACTIVE_ID);
+    return localStorage.getItem(STORAGE_KEY_ACTIVE_ID) || localStorage.getItem(LEGACY_STORAGE_KEY_ACTIVE_ID);
   },
 
   setActiveSessionId: (id: string | null) => {
@@ -22,6 +24,7 @@ export const storage = {
       localStorage.setItem(STORAGE_KEY_ACTIVE_ID, id);
     } else {
       localStorage.removeItem(STORAGE_KEY_ACTIVE_ID);
+      localStorage.removeItem(LEGACY_STORAGE_KEY_ACTIVE_ID);
     }
   },
 

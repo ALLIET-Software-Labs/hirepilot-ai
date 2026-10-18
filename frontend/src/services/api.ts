@@ -48,7 +48,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     return await response.json() as T;
   } catch (err: any) {
     if (err instanceof ApiError) throw err;
-    throw new ApiError(err.message || 'Unable to connect to ApplyForge AI backend service.', 0);
+    throw new ApiError(err.message || 'Unable to connect to HirePilot AI backend service.', 0);
   }
 }
 
@@ -135,7 +135,7 @@ export const api = {
     });
   },
 
-  exportDocx: async (resumeData: TailoredResumeData, filename: string = 'ApplyForge_Resume.docx'): Promise<void> => {
+  exportDocx: async (resumeData: TailoredResumeData, filename: string = 'HirePilot_Resume.docx'): Promise<void> => {
     const response = await fetch(`${API_BASE}/api/export-docx`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

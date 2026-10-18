@@ -1,4 +1,4 @@
-// Core Data Types for ApplyForge AI
+// Core Data Types for HirePilot AI
 
 export type StepId = 'landing' | 'setup' | 'analysis' | 'studio' | 'interview' | 'checklist';
 

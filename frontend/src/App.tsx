@@ -59,7 +59,7 @@ export function App() {
           model_available: false,
           available_models: [],
           endpoint: 'http://localhost:11434',
-          message: 'ApplyForge backend or Ollama is offline. Start the backend and Ollama to enable local AI.'
+          message: 'HirePilot backend or Ollama is offline. Start the backend and Ollama to enable local AI.'
         }
       });
     } finally {
@@ -522,7 +522,7 @@ export function App() {
           {/* Sub-footer Bar */}
           <div className="border-t border-[#F4F3EE] pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-ink-400">
             <p>
-              ApplyForge AI is an open-source project created by <a href="https://alliet.company/" target="_blank" rel="noopener noreferrer" className="font-semibold text-ink-700 hover:text-cobalt-600 transition-colors">Alliet Software Labs</a>.
+              HirePilot AI is an open-source project created by <a href="https://alliet.company/" target="_blank" rel="noopener noreferrer" className="font-semibold text-ink-700 hover:text-cobalt-600 transition-colors">Alliet Software Labs</a>.
             </p>
             <p className="flex items-center gap-2">
               <span>Local Ollama (gemma3:4b)</span>

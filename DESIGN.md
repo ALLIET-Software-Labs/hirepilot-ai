@@ -1,5 +1,5 @@
 ---
-name: ApplyForge AI Design System
+name: HirePilot AI Design System
 colors:
   primary: "#0F172A"
   primary-hover: "#1E293B"
@@ -99,7 +99,7 @@ components:
 ---
 
 ## Overview
-ApplyForge AI follows an **editorial minimalism meets modern productivity software** aesthetic. Designed for ambitious professionals, the interface evokes the quiet authority of high-end editorial typography combined with the surgical precision of modern developer tools.
+HirePilot AI follows an **editorial minimalism meets modern productivity software** aesthetic. Designed for ambitious professionals, the interface evokes the quiet authority of high-end editorial typography combined with the surgical precision of modern developer tools.
 
 Every element serves a functional purpose. We prioritize clear visual hierarchy, calm ivory/slate surfaces, and purposeful electric-blue accents over gratuitous gradients or neon decorations.
 
@@ -144,7 +144,7 @@ Every element serves a functional purpose. We prioritize clear visual hierarchy,
   - `rounded-full` (`9999px`): Progress pills, status chips, avatar badges.
 
 ## Components
-- **Wordmark & Logo:** A geometric forge emblem (anvil-inspired clean polygon) paired with `ApplyForge` in semibold Outfit and a subtle pill badge `AI (Local)`.
+- **Wordmark & Logo:** A geometric cockpit/pilot emblem paired with `HirePilot` in semibold Outfit and a subtle pill badge `AI (Local)`.
 - **Local AI Status Indicator:** A persistent pill in the navigation header displaying model readiness (`gemma3:4b (Local) · Ready`), active inference spinner, or setup instructions if offline.
 - **Contextual Clarification Box:** Editorial callout with warm amber left border, explaining *why* answering this question improves ATS alignment.
 - **ATS Resume Editor:** Split-screen or synchronized view with editable section controls on the left and live ATS-formatted preview on the right, with keyword match highlights and instant download buttons (PDF Print & Markdown/DOCX).

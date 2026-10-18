@@ -90,7 +90,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => onNavigate('landing')}
               className="flex items-center gap-2.5 group outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt-500/40 rounded-lg p-1 -m-1 text-left"
-              title="ApplyForge AI — Built by Alliet Software Labs"
+              title="HirePilot AI — Built by Alliet Software Labs"
             >
               {/* Authentic Alliet Software Labs Brand Emblem */}
               <div className="w-8 h-8 rounded-lg overflow-hidden bg-[#080E24] p-0.5 border border-[#080E24]/20 shadow-xs group-hover:scale-105 transition-transform shrink-0 flex items-center justify-center">
@@ -108,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="font-heading font-extrabold text-base sm:text-lg text-ink-950 tracking-tight leading-none">
-                    ApplyForge
+                    HirePilot
                   </span>
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-cobalt-50 text-cobalt-700 border border-cobalt-200">
                     AI

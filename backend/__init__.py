@@ -1,1 +1,1 @@
-"""ApplyForge AI Backend Package"""
+"""HirePilot AI Backend Package"""

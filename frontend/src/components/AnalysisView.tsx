@@ -322,7 +322,7 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({
                   </span>
                 </div>
                 <p className="text-xs text-ink-700 leading-relaxed font-normal max-w-2xl">
-                  Answering gives ApplyForge AI real metrics, scale, and tools to strengthen your resume without inventing claims. Feel free to answer as few as you like, click quick suggestion chips, or skip completely.
+                  Answering gives HirePilot AI real metrics, scale, and tools to strengthen your resume without inventing claims. Feel free to answer as few as you like, click quick suggestion chips, or skip completely.
                 </p>
               </div>
             </div>

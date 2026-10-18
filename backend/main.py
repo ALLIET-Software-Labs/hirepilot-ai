@@ -1,5 +1,5 @@
 """
-ApplyForge AI - FastAPI Application Server
+HirePilot AI - FastAPI Application Server
 Provides REST APIs for:
 - Health and local Ollama connectivity
 - Resume parsing (PDF, DOCX, TXT)
@@ -57,7 +57,7 @@ except ImportError:
     from docx_generator import generate_resume_docx
 
 app = FastAPI(
-    title="ApplyForge AI API",
+    title="HirePilot AI API",
     description="Local AI Career Preparation Platform powered by Ollama and gemma3:4b",
     version="1.0.0"
 )
@@ -268,7 +268,7 @@ async def export_docx_endpoint(resume_data: Dict[str, Any]):
     """Generate ATS-compliant .docx binary document from resume structure."""
     try:
         buffer = generate_resume_docx(resume_data)
-        filename = f"ApplyForge_Resume_{resume_data.get('candidate_name', 'Tailored').replace(' ', '_')}.docx"
+        filename = f"HirePilot_Resume_{resume_data.get('candidate_name', 'Tailored').replace(' ', '_')}.docx"
         return Response(
             content=buffer.getvalue(),
             media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",

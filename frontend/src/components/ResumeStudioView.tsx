@@ -48,7 +48,7 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
   const handleExportDocx = async () => {
     setIsExportingDocx(true);
     try {
-      const filename = `ApplyForge_${(resume.candidate_name || 'Resume').replace(/\s+/g, '_')}_Tailored.docx`;
+      const filename = `HirePilot_${(resume.candidate_name || 'Resume').replace(/\s+/g, '_')}_Tailored.docx`;
       await api.exportDocx(resume, filename);
     } catch (err: any) {
       alert(`DOCX Export failed: ${err.message}`);
