@@ -98,24 +98,31 @@ export const ChecklistView: React.FC<ChecklistViewProps> = ({
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
       {/* Header */}
-      <div className="space-y-1">
-        <div className="flex items-center gap-2">
-          <h1 className="font-heading text-2xl font-bold text-ink-950">
-            Prioritized Preparation Checklist
-          </h1>
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cobalt-50 text-cobalt-700 border border-cobalt-200">
+      <div className="space-y-1.5 border-b border-[#E2E0D8] pb-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider text-cobalt-700 bg-cobalt-500/10 border border-cobalt-500/20 mb-1.5">
+              <span>Step 5 of 5</span>
+              <span>·</span>
+              <span>Mastery Roadmap</span>
+            </div>
+            <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-ink-950 tracking-tight leading-tight">
+              Prioritized Preparation Checklist
+            </h1>
+          </div>
+          <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-cobalt-50 text-cobalt-700 border border-cobalt-200 shadow-xs">
             {total} Action Topics
           </span>
         </div>
-        <p className="text-xs sm:text-sm text-ink-600">
+        <p className="text-xs sm:text-sm text-ink-600 font-normal leading-relaxed max-w-2xl">
           Targeted study roadmap constructed from your resume gaps, target role requirements, and technical interview benchmarks.
         </p>
       </div>
 
       {/* Progress & Milestone Overview Card */}
-      <div className="bg-white border border-[#E2E0D8] rounded-xl p-6 shadow-subtle space-y-4">
+      <div className="bg-white border border-[#E2E0D8] rounded-2xl p-6 sm:p-7 shadow-card space-y-4 hover:border-ink-300 transition-all">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -130,10 +137,10 @@ export const ChecklistView: React.FC<ChecklistViewProps> = ({
               )}
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="font-heading text-3xl font-extrabold text-ink-950">
+              <span className="font-heading text-3xl sm:text-4xl font-extrabold text-ink-950 tabular-nums tracking-tight">
                 {progressPercent}%
               </span>
-              <span className="text-xs text-ink-600">
+              <span className="text-xs text-ink-600 font-medium">
                 ({completed} of {total} topics mastered)
               </span>
             </div>

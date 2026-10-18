@@ -70,37 +70,37 @@ export const InterviewPrepView: React.FC<InterviewPrepViewProps> = ({
   const totalQuestions = categories.reduce((acc, cat) => acc + (cat.questions?.length || 0), 0);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-[#E2E0D8] pb-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="font-heading text-2xl font-bold text-ink-950">
-              Company Research & Interview Prep
-            </h1>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cobalt-50 text-cobalt-700 border border-cobalt-200">
-              {totalQuestions} Grounded Questions
-            </span>
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider text-cobalt-700 bg-cobalt-500/10 border border-cobalt-500/20">
+            <span>Step 4 of 5</span>
+            <span>·</span>
+            <span>Interview Coaching</span>
           </div>
-          <p className="text-xs sm:text-sm text-ink-600 mt-1">
-            Questions tailored to the job description, confirmed resume experience, and real web intelligence.
+          <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-ink-950 tracking-tight leading-tight">
+            Company Research & Interview Prep
+          </h1>
+          <p className="text-xs sm:text-sm text-ink-600 font-normal leading-relaxed max-w-2xl">
+            Questions tailored to target job requirements, verified resume history, and real live web intelligence.
           </p>
         </div>
 
         <button
           onClick={onProceedToChecklist}
           disabled={isLoadingChecklist}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold bg-ink-950 text-white hover:bg-ink-900 shadow-card transition-all"
+          className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold bg-ink-950 text-white hover:bg-ink-900 shadow-card hover:shadow-card-hover transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
         >
           {isLoadingChecklist ? (
             <>
-              <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin shrink-0" />
               <span>{loadingStepText || 'Generating Preparation Plan...'}</span>
             </>
           ) : (
             <>
               <span>Review Preparation Checklist</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 shrink-0" />
             </>
           )}
         </button>
@@ -179,32 +179,34 @@ export const InterviewPrepView: React.FC<InterviewPrepViewProps> = ({
         </div>
       )}
 
-      {/* Category Filter Chips */}
-      <div className="flex flex-wrap items-center gap-1.5 pt-2">
-        <button
-          onClick={() => setActiveCategoryFilter('All')}
-          className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
-            activeCategoryFilter === 'All'
-              ? 'bg-ink-950 text-white'
-              : 'bg-white text-ink-700 border border-[#E2E0D8] hover:bg-[#F4F3EE]'
-          }`}
-        >
-          All Categories ({totalQuestions})
-        </button>
-
-        {categories.map((cat, idx) => (
+      {/* Category Filter Chips — Segmented Track */}
+      <div className="flex items-center gap-1.5 pt-1 overflow-x-auto pb-1">
+        <div className="bg-[#EFECE6]/80 p-1 rounded-xl border border-[#E2E0D8] inline-flex items-center gap-1 shadow-inner-sm">
           <button
-            key={idx}
-            onClick={() => setActiveCategoryFilter(cat.category_name)}
-            className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
-              activeCategoryFilter === cat.category_name
-                ? 'bg-ink-950 text-white'
-                : 'bg-white text-ink-700 border border-[#E2E0D8] hover:bg-[#F4F3EE]'
+            onClick={() => setActiveCategoryFilter('All')}
+            className={`h-8 px-3.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap select-none ${
+              activeCategoryFilter === 'All'
+                ? 'bg-ink-950 text-white shadow-xs'
+                : 'text-ink-700 hover:text-ink-950 hover:bg-white/70'
             }`}
           >
-            {cat.category_name} ({cat.questions?.length || 0})
+            All Categories ({totalQuestions})
           </button>
-        ))}
+
+          {categories.map((cat, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveCategoryFilter(cat.category_name)}
+              className={`h-8 px-3 rounded-lg text-xs font-semibold transition-all whitespace-nowrap select-none ${
+                activeCategoryFilter === cat.category_name
+                  ? 'bg-ink-950 text-white shadow-xs'
+                  : 'text-ink-700 hover:text-ink-950 hover:bg-white/70'
+              }`}
+            >
+              {cat.category_name} ({cat.questions?.length || 0})
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Categorized Interview Questions Accordion */}

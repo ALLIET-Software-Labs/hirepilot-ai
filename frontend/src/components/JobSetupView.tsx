@@ -98,35 +98,40 @@ export const JobSetupView: React.FC<JobSetupViewProps> = ({
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
       {/* Header */}
-      <div className="mb-8 space-y-1">
-        <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-ink-950 tracking-tight">
-          Job & Resume Setup
+      <div className="mb-8 space-y-2">
+        <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider text-cobalt-700 bg-cobalt-500/10 border border-cobalt-500/20">
+          <span>Step 1 of 5</span>
+          <span>·</span>
+          <span>Role Ingestion</span>
+        </div>
+        <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-ink-950 tracking-tight leading-tight">
+          Job & Candidate Setup
         </h1>
-        <p className="text-xs sm:text-sm text-ink-600">
-          Upload your current resume and paste the target job description to initiate the grounded comparison.
+        <p className="text-xs sm:text-sm text-ink-600 leading-relaxed max-w-2xl font-normal">
+          Upload your existing resume and paste the target job description to initiate the grounded gap comparison. Your career data remains 100% on-device.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Left Column: Resume Input */}
-          <div className="space-y-4">
+          <div className="bg-white border border-[#E2E0D8] rounded-2xl p-6 sm:p-7 shadow-card space-y-4 hover:border-ink-300 transition-all">
             <div className="flex items-center justify-between">
-              <label className="font-heading text-sm font-bold text-ink-900 flex items-center gap-2">
+              <label className="font-heading text-sm font-bold text-ink-950 flex items-center gap-2">
                 <FileText className="w-4 h-4 text-cobalt-600" />
-                <span>1. Candidate Resume</span>
+                <span>Candidate Resume</span>
               </label>
 
               {resumeText && (
                 <button
                   type="button"
                   onClick={() => setShowManualEditor(!showManualEditor)}
-                  className="text-xs text-cobalt-700 hover:text-cobalt-800 flex items-center gap-1 font-medium"
+                  className="text-xs text-cobalt-700 hover:text-cobalt-800 flex items-center gap-1 font-semibold"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
-                  <span>{showManualEditor ? 'Hide Text Editor' : 'Edit Resume Text'}</span>
+                  <span>{showManualEditor ? 'Hide Text Editor' : 'Edit Text'}</span>
                 </button>
               )}
             </div>
@@ -139,7 +144,7 @@ export const JobSetupView: React.FC<JobSetupViewProps> = ({
               className={`relative border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
                 resumeText && !uploadError
                   ? 'border-emerald-300 bg-emerald-50/30 hover:bg-emerald-50/50'
-                  : 'border-[#D5D1C7] bg-white hover:border-cobalt-500 hover:bg-[#FAF9F5]'
+                  : 'border-[#D5D1C7] bg-[#FAF9F5] hover:border-cobalt-500 hover:bg-white'
               }`}
             >
               <input
@@ -228,21 +233,21 @@ export const JobSetupView: React.FC<JobSetupViewProps> = ({
           </div>
 
           {/* Right Column: Job Description & Target Details */}
-          <div className="space-y-4">
+          <div className="bg-white border border-[#E2E0D8] rounded-2xl p-6 sm:p-7 shadow-card space-y-4 hover:border-ink-300 transition-all">
             <div className="flex items-center justify-between">
-              <label className="font-heading text-sm font-bold text-ink-900 flex items-center gap-2">
+              <label className="font-heading text-sm font-bold text-ink-950 flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-cobalt-600" />
-                <span>2. Target Role & Job Description</span>
+                <span>Target Job & Role Requirements</span>
               </label>
-              <span className="text-xs font-mono text-ink-500">
+              <span className="text-[11px] font-mono text-ink-500 font-medium bg-[#FAF9F5] px-2 py-0.5 rounded border border-[#E2E0D8]">
                 {jobDescription.split(/\s+/).filter(Boolean).length} words
               </span>
             </div>
 
             {/* Meta fields: Company & Job Title */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label className="block text-[11px] font-semibold text-ink-700 uppercase tracking-wider mb-1">
+                <label className="block text-[10px] font-mono font-bold text-ink-600 uppercase tracking-wider mb-1">
                   Company Name <span className="text-cobalt-600 font-normal">(for web research)</span>
                 </label>
                 <div className="relative">
@@ -251,14 +256,14 @@ export const JobSetupView: React.FC<JobSetupViewProps> = ({
                     type="text"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    placeholder="e.g. Stripe, OpenAI, Google"
-                    className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-[#E2E0D8] bg-white text-ink-900 focus:outline-none focus:ring-2 focus:ring-cobalt-600"
+                    placeholder="e.g. Stripe, Wipro, Google"
+                    className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-[#D5D3CB] bg-[#FAF9F5] focus:bg-white text-ink-950 focus:outline-none focus:ring-4 focus:ring-cobalt-500/10 focus:border-cobalt-600 transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-ink-700 uppercase tracking-wider mb-1">
+                <label className="block text-[10px] font-mono font-bold text-ink-600 uppercase tracking-wider mb-1">
                   Target Job Title
                 </label>
                 <input
@@ -266,7 +271,7 @@ export const JobSetupView: React.FC<JobSetupViewProps> = ({
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
                   placeholder="e.g. Senior Software Engineer"
-                  className="w-full px-3 py-1.5 text-xs rounded-lg border border-[#E2E0D8] bg-white text-ink-900 focus:outline-none focus:ring-2 focus:ring-cobalt-600"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-[#D5D3CB] bg-[#FAF9F5] focus:bg-white text-ink-950 focus:outline-none focus:ring-4 focus:ring-cobalt-500/10 focus:border-cobalt-600 transition-all"
                 />
               </div>
             </div>
@@ -276,9 +281,9 @@ export const JobSetupView: React.FC<JobSetupViewProps> = ({
               <textarea
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
-                placeholder="Paste the full job description here (responsibilities, qualifications, tech stack requirements)..."
+                placeholder="Paste the full job description here (responsibilities, technical qualifications, cloud/tooling requirements)..."
                 rows={11}
-                className="w-full text-xs p-3 rounded-lg border border-[#E2E0D8] bg-white focus:outline-none focus:ring-2 focus:ring-cobalt-600 text-ink-900 resize-none leading-relaxed"
+                className="w-full text-xs sm:text-sm p-4 rounded-xl border border-[#D5D3CB] bg-[#FAF9F5] focus:bg-white focus:outline-none focus:ring-4 focus:ring-cobalt-500/10 focus:border-cobalt-600 text-ink-950 placeholder:text-ink-400 resize-none leading-relaxed transition-all shadow-inner-sm"
               />
             </div>
           </div>

@@ -233,22 +233,41 @@ def generate_resume_docx(data: Dict[str, Any]) -> io.BytesIO:
                 d_run.font.size = Pt(9.5)
                 d_run.font.color.rgb = RGBColor(100, 116, 139)
 
-    # 7. Certifications (if present)
+    # 7. Certifications (strictly only if real, verified, and not N/A)
     certs = data.get("certifications", [])
-    if certs:
+    valid_certs = []
+    for cert in certs:
+        if not isinstance(cert, dict):
+            continue
+        c_name = str(cert.get("name", "")).strip()
+        c_issuer = str(cert.get("issuer", "")).strip()
+        if not c_name or c_name.lower() in ["n/a", "none", "not applicable"]:
+            continue
+        if "n/a" in c_name.lower() or "none" in c_name.lower() or "(n/a)" in c_name.lower():
+            continue
+        if c_issuer.lower() in ["n/a", "none"] and ("certification" in c_name.lower() or "certificate" in c_name.lower()):
+            continue
+        valid_certs.append(cert)
+
+    if valid_certs:
         add_section_header("Certifications & Credentials")
-        for cert in certs:
+        for cert in valid_certs:
             cert_p = doc.add_paragraph(style='List Bullet')
             cert_p.paragraph_format.space_before = Pt(1)
             cert_p.paragraph_format.space_after = Pt(2)
-            c_name = cert.get("name", str(cert))
+            c_name = cert.get("name", "")
             run = cert_p.add_run(c_name)
             run.font.size = Pt(9.5)
-            issuer = cert.get("issuer", "") if isinstance(cert, dict) else ""
-            if issuer:
-                i_run = cert_p.add_run(f" - {issuer}")
+            issuer = cert.get("issuer", "")
+            if issuer and "n/a" not in str(issuer).lower():
+                i_run = cert_p.add_run(f" — {issuer}")
                 i_run.font.size = Pt(9)
                 i_run.font.color.rgb = RGBColor(100, 116, 139)
+            year = cert.get("year", "")
+            if year and "n/a" not in str(year).lower() and str(year).lower() != "year":
+                y_run = cert_p.add_run(f" ({year})")
+                y_run.font.size = Pt(8.5)
+                y_run.font.color.rgb = RGBColor(148, 163, 184)
 
     # Save to memory buffer
     buffer = io.BytesIO()

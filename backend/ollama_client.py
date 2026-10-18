@@ -271,11 +271,7 @@ Generate an ATS-optimized resume. Return pure JSON with this exact structure:
     }}
   ],
   "certifications": [
-    {{
-      "name": "Certification Name",
-      "issuer": "Issuing Org",
-      "year": "Year"
-    }}
+    // Include real certifications ONLY if candidate resume explicitly states them. If candidate has none, return []
   ],
   "ats_keyword_analysis": {{
     "coverage_percentage": 82,
@@ -284,9 +280,37 @@ Generate an ATS-optimized resume. Return pure JSON with this exact structure:
     "disclaimer": "Keyword coverage is a heuristic estimation and does not guarantee passing automated screening."
   }}
 }}
+IMPORTANT: If candidate has no certifications, output "certifications": []. NEVER write "N/A" or placeholder certifications!
 """
     raw_response = await call_ollama(prompt, system_prompt=system_prompt, temperature=0.15)
-    return extract_json_from_response(raw_response)
+    parsed = extract_json_from_response(raw_response)
+
+    # Strict post-processing: remove any N/A or placeholder certifications
+    if isinstance(parsed, dict) and "certifications" in parsed and isinstance(parsed["certifications"], list):
+        cleaned_certs = []
+        for cert in parsed["certifications"]:
+            if not isinstance(cert, dict):
+                continue
+            name = str(cert.get("name", "")).strip()
+            issuer = str(cert.get("issuer", "")).strip()
+            # If name or issuer contains N/A or None, discard it
+            if not name or name.lower() in ["n/a", "none", "not applicable", "tbd"]:
+                continue
+            if "n/a" in name.lower() or "none" in name.lower() or "(n/a)" in name.lower():
+                continue
+            if issuer.lower() in ["n/a", "none", "not applicable"]:
+                issuer = ""
+            year = str(cert.get("year", "")).strip()
+            if year.lower() in ["n/a", "none", "year"]:
+                year = ""
+            cleaned_certs.append({
+                "name": name,
+                "issuer": issuer,
+                "year": year
+            })
+        parsed["certifications"] = cleaned_certs
+
+    return parsed
 
 
 def build_grounded_interview_fallback(

@@ -421,23 +421,41 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
             </div>
           )}
 
-          {/* Section: Certifications */}
-          {resume.certifications && resume.certifications.length > 0 && (
-            <div className="space-y-1.5">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 pb-0.5">
-                Certifications
-              </h2>
-              <ul className="list-disc list-outside pl-4 text-xs text-ink-800 space-y-0.5">
-                {resume.certifications.map((cert, cIdx) => (
-                  <li key={cIdx}>
-                    <span className="font-semibold">{cert.name}</span>
-                    {cert.issuer && <span className="text-ink-600"> — {cert.issuer}</span>}
-                    {cert.year && <span className="text-ink-500"> ({cert.year})</span>}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {/* Section: Certifications & Credentials (Omitted completely if no verified credentials exist) */}
+          {(() => {
+            const validCerts = (resume.certifications || []).filter((cert) => {
+              if (!cert || !cert.name) return false;
+              const name = cert.name.trim().toLowerCase();
+              const issuer = (cert.issuer || '').trim().toLowerCase();
+              if (!name || name === 'n/a' || name === 'none' || name === 'not applicable') return false;
+              if (name.includes('n/a') || name.includes('(n/a)') || name.includes('none')) return false;
+              if (issuer === 'n/a' && (name.includes('certification') || name.includes('certificate'))) return false;
+              return true;
+            });
+
+            if (validCerts.length === 0) return null;
+
+            return (
+              <div className="space-y-1.5">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 pb-0.5">
+                  Certifications & Credentials
+                </h2>
+                <ul className="list-disc list-outside pl-4 text-xs text-ink-800 space-y-0.5">
+                  {validCerts.map((cert, cIdx) => (
+                    <li key={cIdx}>
+                      <span className="font-semibold">{cert.name}</span>
+                      {cert.issuer && !cert.issuer.toLowerCase().includes('n/a') && (
+                        <span className="text-ink-600"> — {cert.issuer}</span>
+                      )}
+                      {cert.year && !cert.year.toLowerCase().includes('n/a') && !cert.year.toLowerCase().includes('year') && (
+                        <span className="text-ink-500"> ({cert.year})</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })()}
         </div>
       </div>
 
