@@ -17,15 +17,15 @@ MODEL_NAME = "gemma3:4b"
 
 
 def extract_json_from_response(text: str) -> Any:
-    """Robustly extract and parse JSON from local LLM outputs."""
+    """Robustly extract and parse JSON from local LLM outputs with multi-stage repair."""
     if not text or not text.strip():
         raise ValueError("Model returned an empty response.")
 
     cleaned = text.strip()
 
-    # 1. Check for markdown code fences: ```json ... ``` or ``` ... ```
-    match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', cleaned, re.IGNORECASE)
-    if match:
+    # 1. Check for markdown code fences (even if closing fence is missing due to truncation)
+    match = re.search(r'```(?:json)?\s*([\s\S]*?)(?:```|$)', cleaned, re.IGNORECASE)
+    if match and match.group(1).strip():
         cleaned = match.group(1).strip()
 
     # 2. Extract outermost JSON object {...} or array [...]
@@ -34,12 +34,16 @@ def extract_json_from_response(text: str) -> Any:
 
     if first_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
         last_brace = cleaned.rfind('}')
-        if last_brace != -1:
+        if last_brace != -1 and last_brace > first_brace:
             cleaned = cleaned[first_brace:last_brace + 1]
+        else:
+            cleaned = cleaned[first_brace:]
     elif first_bracket != -1:
         last_bracket = cleaned.rfind(']')
-        if last_bracket != -1:
+        if last_bracket != -1 and last_bracket > first_bracket:
             cleaned = cleaned[first_bracket:last_bracket + 1]
+        else:
+            cleaned = cleaned[first_bracket:]
 
     # 3. Clean common LLM formatting issues
     # Remove trailing commas before closing braces/brackets
@@ -47,13 +51,39 @@ def extract_json_from_response(text: str) -> Any:
 
     try:
         return json.loads(cleaned)
-    except json.JSONDecodeError as err:
-        # Fallback repair: replace unescaped newlines inside strings if any
-        try:
-            repaired = re.sub(r'(?<!\\)\n', ' ', cleaned)
-            return json.loads(repaired)
-        except Exception:
-            raise ValueError(f"Failed to parse model JSON: {err.msg}. Raw text preview: {text[:200]}")
+    except json.JSONDecodeError:
+        pass
+
+    # 4. Attempt repair: replace unescaped newlines inside strings
+    try:
+        repaired = re.sub(r'(?<!\\)\n', ' ', cleaned)
+        repaired = re.sub(r',\s*([}\]])', r'\1', repaired)
+        return json.loads(repaired)
+    except Exception:
+        pass
+
+    # 5. Attempt auto-repair for truncated JSON responses
+    try:
+        repaired = cleaned.strip()
+        # If odd number of unescaped quotes, close the open string
+        quote_count = len(re.findall(r'(?<!\\)"', repaired))
+        if quote_count % 2 != 0:
+            repaired += '"'
+        
+        # Remove trailing dangling colon, comma, or whitespace
+        repaired = re.sub(r'[,:\s]+$', '', repaired)
+        
+        # Balance brackets and braces
+        open_braces = repaired.count('{') - repaired.count('}')
+        open_brackets = repaired.count('[') - repaired.count(']')
+        
+        # Append missing closing brackets and braces in proper order
+        repaired += (']' * max(0, open_brackets)) + ('}' * max(0, open_braces))
+        return json.loads(repaired)
+    except Exception:
+        pass
+
+    raise ValueError(f"Failed to parse model JSON. Raw text preview: {text[:200]}")
 
 
 async def check_ollama_status() -> Dict[str, Any]:

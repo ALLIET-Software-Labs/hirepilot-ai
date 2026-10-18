@@ -66,6 +66,14 @@
     background-color: #DBEAFE;
     color: #1E40AF;
   }
+
+  /* Prevent browser outlines on mouse click while preserving accessibility for keyboard tabbing */
+  :focus:not(:focus-visible),
+  button:focus:not(:focus-visible),
+  a:focus:not(:focus-visible) {
+    outline: none !important;
+    box-shadow: none !important;
+  }
 }
 
 /* Custom scrollbar for clean editorial look */

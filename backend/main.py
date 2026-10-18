@@ -37,7 +37,9 @@ try:
         analyze_resume_and_jd,
         generate_tailored_resume,
         generate_interview_preparation,
-        generate_preparation_checklist
+        generate_preparation_checklist,
+        build_grounded_interview_fallback,
+        build_grounded_checklist_fallback
     )
     from backend.docx_generator import generate_resume_docx
 except ImportError:
@@ -48,7 +50,9 @@ except ImportError:
         analyze_resume_and_jd,
         generate_tailored_resume,
         generate_interview_preparation,
-        generate_preparation_checklist
+        generate_preparation_checklist,
+        build_grounded_interview_fallback,
+        build_grounded_checklist_fallback
     )
     from docx_generator import generate_resume_docx
 
@@ -211,9 +215,24 @@ async def interview_prep_endpoint(payload: InterviewPrepRequest):
             job_title=payload.job_title or "",
             research_summary=payload.research_summary
         )
-        return prep
+        if prep and isinstance(prep, dict) and prep.get("categories") and len(prep["categories"]) > 0:
+            return prep
+        return build_grounded_interview_fallback(
+            job_description=payload.job_description,
+            resume_text=payload.resume_text,
+            company_name=payload.company_name or "",
+            job_title=payload.job_title or "",
+            research_summary=payload.research_summary
+        )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Interview prep generation failed: {str(e)}")
+        print(f"[Interview Prep Endpoint Warning]: {e}. Returning grounded interview fallback.")
+        return build_grounded_interview_fallback(
+            job_description=payload.job_description,
+            resume_text=payload.resume_text,
+            company_name=payload.company_name or "",
+            job_title=payload.job_title or "",
+            research_summary=payload.research_summary
+        )
 
 
 @app.post("/api/checklist")
@@ -226,9 +245,20 @@ async def checklist_endpoint(payload: ChecklistRequest):
             gaps=payload.gaps,
             company_name=payload.company_name or ""
         )
-        return checklist
+        if checklist and isinstance(checklist, dict) and checklist.get("items") and len(checklist["items"]) > 0:
+            return checklist
+        return build_grounded_checklist_fallback(
+            job_description=payload.job_description,
+            gaps=payload.gaps,
+            company_name=payload.company_name or ""
+        )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Checklist generation failed: {str(e)}")
+        print(f"[Checklist Endpoint Warning]: {e}. Returning grounded checklist fallback.")
+        return build_grounded_checklist_fallback(
+            job_description=payload.job_description,
+            gaps=payload.gaps,
+            company_name=payload.company_name or ""
+        )
 
 
 @app.post("/api/export-docx")

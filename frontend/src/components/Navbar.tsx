@@ -89,7 +89,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={() => onNavigate('landing')}
-              className="flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-cobalt-600 rounded-lg p-1 -m-1 text-left"
+              className="flex items-center gap-2.5 group outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cobalt-500/40 rounded-lg p-1 -m-1 text-left"
               title="ApplyForge AI — Built by Alliet Software Labs"
             >
               {/* Authentic Alliet Software Labs Brand Emblem */}
