@@ -188,6 +188,8 @@ async def tailor_resume_endpoint(payload: TailorResumeRequest):
         )
         return tailored
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Resume tailoring failed: {str(e)}")
 
 
