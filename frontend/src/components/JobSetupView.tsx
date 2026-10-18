@@ -247,9 +247,14 @@ export const JobSetupView: React.FC<JobSetupViewProps> = ({
             {/* Meta fields: Company & Job Title */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label className="block text-[10px] font-mono font-bold text-ink-600 uppercase tracking-wider mb-1">
-                  Company Name <span className="text-cobalt-600 font-normal">(for web research)</span>
-                </label>
+                <div className="flex items-center justify-between h-5 mb-1.5">
+                  <label className="text-[10px] font-mono font-bold text-ink-600 uppercase tracking-wider">
+                    Company Name
+                  </label>
+                  <span className="text-[9px] font-mono text-cobalt-700 bg-cobalt-500/10 border border-cobalt-500/20 px-1.5 py-0.5 rounded font-medium">
+                    Web Research
+                  </span>
+                </div>
                 <div className="relative">
                   <Building2 className="w-3.5 h-3.5 absolute left-3 top-2.5 text-ink-400" />
                   <input
@@ -263,9 +268,14 @@ export const JobSetupView: React.FC<JobSetupViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[10px] font-mono font-bold text-ink-600 uppercase tracking-wider mb-1">
-                  Target Job Title
-                </label>
+                <div className="flex items-center justify-between h-5 mb-1.5">
+                  <label className="text-[10px] font-mono font-bold text-ink-600 uppercase tracking-wider">
+                    Target Job Title
+                  </label>
+                  <span className="text-[9px] font-mono text-ink-400 font-medium">
+                    Target Role
+                  </span>
+                </div>
                 <input
                   type="text"
                   value={jobTitle}

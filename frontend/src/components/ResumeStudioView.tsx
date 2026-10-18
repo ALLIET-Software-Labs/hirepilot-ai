@@ -102,6 +102,13 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
     onSaveEdits(updated);
   };
 
+  const handleProjectBulletChange = (projIdx: number, bulletIdx: number, val: string) => {
+    const updated = { ...resume };
+    updated.projects[projIdx].bullets[bulletIdx] = val;
+    setResume(updated);
+    onSaveEdits(updated);
+  };
+
   const atsAnalysis = resume.ats_keyword_analysis;
 
   return (
@@ -388,9 +395,20 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
                         </span>
                       )}
                     </div>
-                    <ul className="list-disc list-outside pl-4 space-y-0.5 text-ink-800 leading-relaxed">
+                    <ul className="list-disc list-outside pl-4 space-y-1 text-xs text-ink-800 leading-relaxed">
                       {proj.bullets.map((b, bIdx) => (
-                        <li key={bIdx}>{b}</li>
+                        <li key={bIdx}>
+                          {isEditing ? (
+                            <textarea
+                              value={b}
+                              onChange={(e) => handleProjectBulletChange(pIdx, bIdx, e.target.value)}
+                              rows={2}
+                              className="w-full text-xs p-1 border border-cobalt-400 rounded focus:outline-none leading-normal"
+                            />
+                          ) : (
+                            <span>{b}</span>
+                          )}
+                        </li>
                       ))}
                     </ul>
                   </div>
