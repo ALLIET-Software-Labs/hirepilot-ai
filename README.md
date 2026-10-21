@@ -2,7 +2,7 @@
 ### Created and Open-Sourced by [Alliet Software Labs](https://alliet.company/)
 
 [![GitHub: ALLIET-Software-Labs/hirepilot-ai](https://img.shields.io/badge/GitHub-ALLIET--Software--Labs%2Fhirepilot--ai-181717.svg?logo=github)](https://github.com/ALLIET-Software-Labs/hirepilot-ai)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/ALLIET-Software-Labs/hirepilot-ai/blob/main/LICENSE)
 [![Privacy: 100% Local](https://img.shields.io/badge/Privacy-100%25_On--Device-emerald.svg)](#zero-telemetry-privacy-architecture)
 [![Model: gemma3:4b](https://img.shields.io/badge/Model-gemma3:4b-purple.svg)](https://ollama.com/library/gemma3)
 [![Backend: FastAPI](https://img.shields.io/badge/Backend-FastAPI-teal.svg)](https://fastapi.tiangolo.com/)
@@ -64,28 +64,40 @@ Most AI resume tools act as generic chat wrappers: they hallucinate skills you d
 
 ## 3. Zero-Telemetry Privacy Architecture
 
-```
-                    ┌────────────────────────────────────────────────────────┐
-                    │                 LOCAL MACHINE BOUNDARY                 │
-                    │                                                        │
-Candidate Resume ──►│  HirePilot Frontend (React 19 + Vite)                  │
-Job Description  ──►│          │                                             │
-                    │          ▼                                             │
-                    │  HirePilot Backend (FastAPI Python)                    │
-                    │          │                                             │
-                    │          ▼                                             │
-                    │  Ollama Inference (gemma3:4b at localhost:11434)      │
-                    │  • Resume Parsing & Gap Analysis                       │
-                    │  • Dynamic Resume Tailoring                            │
-                    │  • Interview & Checklist Synthesis                     │
-                    │                                                        │
-                    └──────────────────────────┬─────────────────────────────┘
-                                               │ (Only search query: e.g. "Stripe engineering tech stack")
-                                               ▼
-                              ┌──────────────────────────────────┐
-                              │ Privacy-Isolated Web Search Engine│
-                              │ (DuckDuckGo or optional Tavily)  │
-                              └──────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph LocalMachine ["LOCAL MACHINE BOUNDARY (100% On-Device • Zero Telemetry)"]
+        direction TB
+        Frontend["HirePilot Frontend (React 19 + Vite)<br/>• Local State & Browser Storage<br/>• Single-Column Virtual Resume Canvas<br/>• Interactive Q&A Clarification UI"]
+        Backend["HirePilot Backend (FastAPI Python)<br/>• Local File Parsing (pypdf & docx)<br/>• Mathematical ATS Formula Engine<br/>• Native Word (.docx) & Vector PDF Generator"]
+        
+        subgraph LocalAI ["Local AI Engine (localhost:11434)"]
+            Ollama["Ollama Runtime + Google DeepMind gemma3:4b<br/>• Zero-Fabrication Fact Alignment<br/>• Mathematical Gap & Seniority Audit<br/>• ATS Resume Synthesis<br/>• STAR Interview Intel Generation"]
+        end
+        
+        Frontend -->|"REST APIs (localhost:8000)"| Backend
+        Backend -->|"HTTP /api/chat (100% Offline)"| Ollama
+    end
+
+    Resume["Candidate Resume<br/>(PDF / DOCX / TXT)"] -->|"Upload (Local)"| Frontend
+    JD["Target Job Description<br/>(Role Requirements)"] -->|"Paste (Local)"| Frontend
+
+    subgraph ExternalWeb ["Privacy-Isolated External Interface"]
+        Search["Live Web Search Engine<br/>(DuckDuckGo / Optional Tavily)<br/>• Company Engineering Tech Stacks<br/>• Reported Real Candidate Questions"]
+    end
+
+    Backend -->|"Sanitized Query ONLY (e.g. 'Stripe tech stack')<br/>ZERO Candidate Names, Contact Info, or PII Transmitted"| Search
+    Search -->|"Public Tech Articles & Interview Reports"| Backend
+
+    style Resume fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#93c5fd
+    style JD fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#93c5fd
+    style Frontend fill:#1e293b,stroke:#475569,stroke-width:1.5px,color:#f1f5f9
+    style Backend fill:#1e293b,stroke:#475569,stroke-width:1.5px,color:#f1f5f9
+    style Ollama fill:#2e1065,stroke:#8b5cf6,stroke-width:2px,color:#ddd6fe
+    style Search fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#a7f3d0
+    style LocalMachine fill:#0f172a,stroke:#3b82f6,stroke-dasharray: 5 5,color:#94a3b8
+    style LocalAI fill:#1e1b4b,stroke:#8b5cf6,stroke-dasharray: 3 3,color:#c4b5fd
+    style ExternalWeb fill:#022c22,stroke:#10b981,stroke-dasharray: 5 5,color:#6ee7b7
 ```
 
 - **Zero Cloud LLMs:** All reasoning, parsing, and tailoring run locally on port `11434`.
@@ -237,6 +249,7 @@ hirepilot-ai/
 │   │       └── LocalAiStatusModal.tsx # Privacy disclosures and Ollama diagnostics
 ├── .env.example             # Environment variable templates
 ├── .gitignore               # Clean git hygiene excluding secrets and temporary data
+├── LICENSE                  # Official MIT open-source license
 └── README.md                # Comprehensive documentation
 ```
 
@@ -292,4 +305,4 @@ No resume tool can honestly guarantee human recruiter hiring decisions. HirePilo
 - **Official Website:** [https://alliet.company/](https://alliet.company/)  
 - **GitHub Repository:** [https://github.com/ALLIET-Software-Labs/hirepilot-ai](https://github.com/ALLIET-Software-Labs/hirepilot-ai)  
 - **Support & Inquiries:** [contact@alliet.company](mailto:contact@alliet.company)  
-- **License:** Open-source software released under the [MIT License](https://opensource.org/licenses/MIT).
+- **License:** Open-source software released under the [MIT License](https://github.com/ALLIET-Software-Labs/hirepilot-ai/blob/main/LICENSE). See the [LICENSE](https://github.com/ALLIET-Software-Labs/hirepilot-ai/blob/main/LICENSE) file for complete details.
