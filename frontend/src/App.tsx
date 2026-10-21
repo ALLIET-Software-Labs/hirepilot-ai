@@ -361,7 +361,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-ink-950">
+    <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-ink-950 print:bg-white print:min-h-0 print:block print:m-0 print:p-0">
       {/* Top Navigation */}
       <Navbar
         currentStep={currentStep}
@@ -391,7 +391,7 @@ export function App() {
       )}
 
       {/* Main Workspace Area */}
-      <main className="flex-1">
+      <main className="flex-1 print:m-0 print:p-0 print:w-full print:block">
         {currentStep === 'landing' && (
           <LandingWorkspace
             sessions={sessions}

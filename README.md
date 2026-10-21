@@ -1,6 +1,7 @@
 # HirePilot AI — Private, Grounded AI Career Preparation Platform
 ### Created and Open-Sourced by [Alliet Software Labs](https://alliet.company/)
 
+[![GitHub: ALLIET-Software-Labs/hirepilot-ai](https://img.shields.io/badge/GitHub-ALLIET--Software--Labs%2Fhirepilot--ai-181717.svg?logo=github)](https://github.com/ALLIET-Software-Labs/hirepilot-ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Privacy: 100% Local](https://img.shields.io/badge/Privacy-100%25_On--Device-emerald.svg)](#zero-telemetry-privacy-architecture)
 [![Model: gemma3:4b](https://img.shields.io/badge/Model-gemma3:4b-purple.svg)](https://ollama.com/library/gemma3)
@@ -12,6 +13,7 @@
 > Transform any job description and resume into a role-targeted ATS resume, mathematical gap audit, verified company research, situational interview answers, and an actionable 0–100% readiness checklist—without sending your confidential career history to cloud servers.
 >
 > 🌐 **Website:** [https://alliet.company/](https://alliet.company/)  
+> 📂 **GitHub Repository:** [https://github.com/ALLIET-Software-Labs/hirepilot-ai](https://github.com/ALLIET-Software-Labs/hirepilot-ai)  
 > ✉️ **Contact:** [contact@alliet.company](mailto:contact@alliet.company)  
 > 💡 **Emblem & Brand:** Official Open-Source Project by Alliet Software Labs
 
@@ -135,7 +137,7 @@ Before installing HirePilot AI, ensure you have the following installed on your 
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/alliet-software-labs/hirepilot-ai.git
+git clone https://github.com/ALLIET-Software-Labs/hirepilot-ai.git
 cd hirepilot-ai
 ```
 
@@ -233,7 +235,6 @@ hirepilot-ai/
 │   │       ├── InterviewPrepView.tsx  # Verified research citations & STAR questions
 │   │       ├── ChecklistView.tsx      # 0–100% prep progress, task cards, confetti
 │   │       └── LocalAiStatusModal.tsx # Privacy disclosures and Ollama diagnostics
-├── DESIGN.md                # Design system specification and color theory
 ├── .env.example             # Environment variable templates
 ├── .gitignore               # Clean git hygiene excluding secrets and temporary data
 └── README.md                # Comprehensive documentation
@@ -289,5 +290,6 @@ No resume tool can honestly guarantee human recruiter hiring decisions. HirePilo
 
 - **Organization:** Alliet Software Labs  
 - **Official Website:** [https://alliet.company/](https://alliet.company/)  
+- **GitHub Repository:** [https://github.com/ALLIET-Software-Labs/hirepilot-ai](https://github.com/ALLIET-Software-Labs/hirepilot-ai)  
 - **Support & Inquiries:** [contact@alliet.company](mailto:contact@alliet.company)  
 - **License:** Open-source software released under the [MIT License](https://opensource.org/licenses/MIT).

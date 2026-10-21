@@ -40,6 +40,8 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isExportingDocx, setIsExportingDocx] = useState(false);
+  const [fitToOnePage, setFitToOnePage] = useState(true);
+  const [paperFormat, setPaperFormat] = useState<'a4' | 'letter'>('a4');
 
   const handlePrint = () => {
     window.print();
@@ -102,6 +104,20 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
     onSaveEdits(updated);
   };
 
+  const handleDeleteExperienceBullet = (expIdx: number, bulletIdx: number) => {
+    const updated = { ...resume };
+    updated.work_experience[expIdx].bullets.splice(bulletIdx, 1);
+    setResume(updated);
+    onSaveEdits(updated);
+  };
+
+  const handleAddExperienceBullet = (expIdx: number) => {
+    const updated = { ...resume };
+    updated.work_experience[expIdx].bullets.push("Architected and implemented key engineering capabilities, optimizing system performance and scalability.");
+    setResume(updated);
+    onSaveEdits(updated);
+  };
+
   const handleProjectBulletChange = (projIdx: number, bulletIdx: number, val: string) => {
     const updated = { ...resume };
     updated.projects[projIdx].bullets[bulletIdx] = val;
@@ -109,10 +125,24 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
     onSaveEdits(updated);
   };
 
+  const handleDeleteProjectBullet = (projIdx: number, bulletIdx: number) => {
+    const updated = { ...resume };
+    updated.projects[projIdx].bullets.splice(bulletIdx, 1);
+    setResume(updated);
+    onSaveEdits(updated);
+  };
+
+  const handleAddProjectBullet = (projIdx: number) => {
+    const updated = { ...resume };
+    updated.projects[projIdx].bullets.push("Engineered core platform functionality utilizing modern frameworks, delivering measurable efficiency gains.");
+    setResume(updated);
+    onSaveEdits(updated);
+  };
+
   const atsAnalysis = resume.ats_keyword_analysis;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="studio-wrapper max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 print:p-0 print:m-0 print:max-w-none print:w-full print:space-y-0">
       {/* Top Controls Toolbar (Hidden on Print) */}
       <div className="no-print bg-white border border-[#E2E0D8] rounded-xl p-4 shadow-subtle flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="space-y-0.5 text-center md:text-left">
@@ -129,8 +159,61 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
           </p>
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons, Format & 1-Page Layout Toggle */}
         <div className="flex flex-wrap items-center gap-2.5">
+          {/* Paper Format Selector */}
+          <div className="flex items-center gap-1 bg-[#F4F3EE] p-0.5 rounded-lg border border-[#E2E0D8]">
+            <button
+              onClick={() => setPaperFormat('a4')}
+              className={`px-2 py-1 text-xs font-bold rounded-md transition-all ${
+                paperFormat === 'a4'
+                  ? 'bg-ink-950 text-white shadow-xs'
+                  : 'text-ink-600 hover:text-ink-950'
+              }`}
+              title="A4 Paper Format (International Standard 210 x 297 mm)"
+            >
+              <span>A4</span>
+            </button>
+            <button
+              onClick={() => setPaperFormat('letter')}
+              className={`px-2 py-1 text-xs font-bold rounded-md transition-all ${
+                paperFormat === 'letter'
+                  ? 'bg-ink-950 text-white shadow-xs'
+                  : 'text-ink-600 hover:text-ink-950'
+              }`}
+              title="US Letter Format (8.5 x 11 in)"
+            >
+              <span>Letter</span>
+            </button>
+          </div>
+
+          {/* Strict 1-Page Fit Toggle Pill */}
+          <div className="flex items-center gap-1 bg-[#F4F3EE] p-0.5 rounded-lg border border-[#E2E0D8]">
+            <button
+              onClick={() => setFitToOnePage(true)}
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-md transition-all ${
+                fitToOnePage
+                  ? 'bg-ink-950 text-white shadow-xs'
+                  : 'text-ink-600 hover:text-ink-950'
+              }`}
+              title="Strict 1-Page Standard (Guaranteed zero page spillover)"
+            >
+              <Check className={`w-3 h-3 ${fitToOnePage ? 'text-emerald-400' : 'hidden'}`} />
+              <span>1-Page Fit</span>
+            </button>
+            <button
+              onClick={() => setFitToOnePage(false)}
+              className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${
+                !fitToOnePage
+                  ? 'bg-ink-950 text-white shadow-xs'
+                  : 'text-ink-600 hover:text-ink-950'
+              }`}
+              title="Spacious Multi-Page CV Layout"
+            >
+              <span>Multi-Page CV</span>
+            </button>
+          </div>
+
           <button
             onClick={() => setIsEditing(!isEditing)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
@@ -251,14 +334,39 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
         </div>
       )}
 
-      {/* Virtual 8.5" x 11" Paper Canvas for ATS Resume */}
-      <div className="flex justify-center">
+      {/* Virtual Paper Canvas for ATS Resume */}
+      <div className="canvas-wrapper flex flex-col items-center space-y-2.5 print:block print:m-0 print:p-0 print:w-full print:space-y-0">
+        {/* Visual 1-Page Indicator Banner */}
+        <div className="no-print w-full max-w-[820px] flex items-center justify-between px-2 text-xs text-ink-500">
+          <div className="flex items-center gap-2">
+            <span className="flex h-2 w-2 relative">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${fitToOnePage ? 'bg-emerald-400 opacity-75' : 'bg-cobalt-400 opacity-75'}`}></span>
+              <span className={`relative inline-flex rounded-full h-2 w-2 ${fitToOnePage ? 'bg-emerald-500' : 'bg-cobalt-500'}`}></span>
+            </span>
+            <span className={`font-semibold ${fitToOnePage ? 'text-emerald-800' : 'text-cobalt-800'}`}>
+              {fitToOnePage ? `Strict 1-Page Fit Active (${paperFormat.toUpperCase()} Standard)` : 'Multi-Page Layout'}
+            </span>
+            <span className="text-[11px] text-ink-500 hidden sm:inline">
+              ({paperFormat === 'a4' ? 'A4 210 x 297 mm' : 'US Letter 8.5" x 11"'} • Edge-to-Edge Print • Zero Spillover)
+            </span>
+          </div>
+          {isEditing && (
+            <span className="text-[11px] text-cobalt-700 font-medium">
+              Click the trash icon on any bullet to trim content for 1 page
+            </span>
+          )}
+        </div>
+
         <div
           id="resume-document-container"
-          className="w-full max-w-[850px] bg-white border border-[#E2E0D8] shadow-resume p-8 sm:p-12 space-y-6 text-ink-950 rounded-lg print:border-none print:shadow-none print:p-0"
+          className={`w-full ${paperFormat === 'a4' ? 'max-w-[794px]' : 'max-w-[816px]'} bg-white border border-[#E2E0D8] shadow-resume text-ink-950 rounded-lg print:border-none print:shadow-none print:p-0 print:m-0 print:max-w-none print:w-full print:rounded-none print:bg-white print:text-black transition-all ${
+            fitToOnePage
+              ? 'p-6 sm:p-7 space-y-3'
+              : 'p-8 sm:p-12 space-y-6'
+          }`}
         >
           {/* Resume Header */}
-          <div className="text-center space-y-1 border-b border-ink-900 pb-3">
+          <div className={`resume-header-border text-center border-b border-ink-900 print:border-black ${fitToOnePage ? 'pb-2 space-y-0.5' : 'pb-3 space-y-1'}`}>
             {isEditing ? (
               <input
                 type="text"
@@ -271,19 +379,19 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
                 className="w-full font-heading text-2xl font-bold text-center border-b border-cobalt-400 focus:outline-none"
               />
             ) : (
-              <h1 className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-ink-950">
+              <h1 className={`font-heading font-extrabold tracking-tight text-ink-950 print:text-black ${fitToOnePage ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl'}`}>
                 {resume.candidate_name}
               </h1>
             )}
 
             {resume.target_role && (
-              <p className="text-xs sm:text-sm font-bold text-cobalt-700 uppercase tracking-wider">
+              <p className={`resume-target-role font-bold text-cobalt-700 print:text-black uppercase tracking-wider ${fitToOnePage ? 'text-xs' : 'text-xs sm:text-sm'}`}>
                 {resume.target_role}
               </p>
             )}
 
             {/* Contact Info Line */}
-            <div className="text-[11px] text-ink-600 flex flex-wrap items-center justify-center gap-x-2 pt-1">
+            <div className={`resume-contact-line text-ink-600 print:text-black flex flex-wrap items-center justify-center gap-x-2 ${fitToOnePage ? 'text-[10px] pt-0.5' : 'text-[11px] pt-1'}`}>
               {resume.contact_info?.email && <span>{resume.contact_info.email}</span>}
               {resume.contact_info?.phone && <span>• {resume.contact_info.phone}</span>}
               {resume.contact_info?.location && <span>• {resume.contact_info.location}</span>}
@@ -294,8 +402,8 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
 
           {/* Section: Professional Summary */}
           {resume.professional_summary && (
-            <div className="space-y-1.5">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 pb-0.5">
+            <div className={`resume-section ${fitToOnePage ? 'space-y-1' : 'space-y-1.5'}`}>
+              <h2 className="resume-section-title text-[11px] font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 print:border-black print:text-black pb-0.5">
                 Professional Summary
               </h2>
               {isEditing ? (
@@ -306,11 +414,11 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
                     setResume(updated);
                     onSaveEdits(updated);
                   }}
-                  rows={4}
+                  rows={fitToOnePage ? 2 : 4}
                   className="w-full text-xs p-2 border border-cobalt-400 rounded focus:outline-none leading-relaxed"
                 />
               ) : (
-                <p className="text-xs text-ink-800 leading-relaxed">
+                <p className={`text-ink-800 print:text-black ${fitToOnePage ? 'text-[10.5px] leading-snug' : 'text-xs leading-relaxed'}`}>
                   {resume.professional_summary}
                 </p>
               )}
@@ -319,15 +427,15 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
 
           {/* Section: Skills & Competencies */}
           {resume.skills && Object.keys(resume.skills).length > 0 && (
-            <div className="space-y-1.5">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 pb-0.5">
+            <div className={`resume-section ${fitToOnePage ? 'space-y-1' : 'space-y-1.5'}`}>
+              <h2 className="resume-section-title text-[11px] font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 print:border-black print:text-black pb-0.5">
                 Skills & Technical Competencies
               </h2>
-              <div className="text-xs space-y-1">
+              <div className={`space-y-0.5 ${fitToOnePage ? 'text-[10.5px]' : 'text-xs space-y-1'}`}>
                 {Object.entries(resume.skills).map(([category, items], idx) => (
-                  <div key={idx} className="flex flex-col sm:flex-row sm:items-baseline gap-1 text-[11px]">
-                    <span className="font-bold text-ink-900 min-w-[170px]">{category}:</span>
-                    <span className="text-ink-700">
+                  <div key={idx} className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                    <span className="font-bold text-ink-900 print:text-black min-w-[170px]">{category}:</span>
+                    <span className="text-ink-700 print:text-black">
                       {Array.isArray(items) ? items.join(', ') : items}
                     </span>
                   </div>
@@ -338,40 +446,63 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
 
           {/* Section: Professional Experience */}
           {resume.work_experience && resume.work_experience.length > 0 && (
-            <div className="space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 pb-0.5">
+            <div className={`resume-section ${fitToOnePage ? 'space-y-2' : 'space-y-3'}`}>
+              <h2 className="resume-section-title text-[11px] font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 print:border-black print:text-black pb-0.5">
                 Professional Experience
               </h2>
-              <div className="space-y-4">
+              <div className={fitToOnePage ? 'space-y-2.5' : 'space-y-4'}>
                 {resume.work_experience.map((exp, expIdx) => (
-                  <div key={expIdx} className="space-y-1">
+                  <div key={expIdx} className="resume-entry space-y-0.5">
                     <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 text-xs">
                       <div>
-                        <span className="font-bold text-ink-950">{exp.role}</span>
-                        {exp.company && <span className="text-ink-700 font-medium"> | {exp.company}</span>}
+                        <span className="font-bold text-ink-950 print:text-black">{exp.role}</span>
+                        {exp.company && <span className="text-ink-700 print:text-black font-medium"> | {exp.company}</span>}
                       </div>
-                      <span className="text-[11px] font-mono text-ink-500 italic">
+                      <span className="resume-meta text-[10.5px] font-mono text-ink-500 italic print:text-slate-800 print:font-sans">
                         {[exp.location, exp.dates].filter(Boolean).join(' — ')}
                       </span>
                     </div>
 
                     {/* Bullet Points */}
-                    <ul className="list-disc list-outside pl-4 space-y-1 text-xs text-ink-800 leading-relaxed">
+                    <ul className={`list-disc list-outside pl-4 text-ink-800 print:text-black ${
+                      fitToOnePage ? 'space-y-0.5 text-[10.5px] leading-snug' : 'space-y-1 text-xs leading-relaxed'
+                    }`}>
                       {exp.bullets.map((bullet, bIdx) => (
-                        <li key={bIdx}>
+                        <li key={bIdx} className="group">
                           {isEditing ? (
-                            <textarea
-                              value={bullet}
-                              onChange={(e) => handleBulletChange(expIdx, bIdx, e.target.value)}
-                              rows={2}
-                              className="w-full text-xs p-1 border border-cobalt-400 rounded focus:outline-none leading-normal"
-                            />
+                            <div className="flex items-start gap-1.5 my-1">
+                              <textarea
+                                value={bullet}
+                                onChange={(e) => handleBulletChange(expIdx, bIdx, e.target.value)}
+                                rows={2}
+                                className="w-full text-xs p-1 border border-cobalt-400 rounded focus:outline-none leading-normal"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteExperienceBullet(expIdx, bIdx)}
+                                className="p-1 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded shrink-0 transition-colors"
+                                title="Delete this bullet to fit on 1 page"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           ) : (
                             <span>{bullet}</span>
                           )}
                         </li>
                       ))}
                     </ul>
+
+                    {isEditing && (
+                      <button
+                        type="button"
+                        onClick={() => handleAddExperienceBullet(expIdx)}
+                        className="flex items-center gap-1 text-[11px] font-semibold text-cobalt-600 hover:text-cobalt-800 pt-1 pl-4"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>Add Bullet Point</span>
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -380,37 +511,60 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
 
           {/* Section: Key Projects */}
           {resume.projects && resume.projects.length > 0 && (
-            <div className="space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 pb-0.5">
+            <div className={`resume-section ${fitToOnePage ? 'space-y-2' : 'space-y-3'}`}>
+              <h2 className="resume-section-title text-[11px] font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 print:border-black print:text-black pb-0.5">
                 Key Technical Projects
               </h2>
-              <div className="space-y-3">
+              <div className={fitToOnePage ? 'space-y-2' : 'space-y-3'}>
                 {resume.projects.map((proj, pIdx) => (
-                  <div key={pIdx} className="space-y-1 text-xs">
+                  <div key={pIdx} className="resume-entry space-y-0.5 text-xs">
                     <div className="flex items-baseline justify-between">
-                      <span className="font-bold text-ink-950">{proj.name}</span>
+                      <span className="font-bold text-ink-950 print:text-black">{proj.name}</span>
                       {proj.technologies && proj.technologies.length > 0 && (
-                        <span className="text-[11px] font-mono text-ink-600">
+                        <span className="resume-meta text-[10px] font-mono text-ink-600 print:text-slate-800 print:font-sans">
                           {proj.technologies.join(', ')}
                         </span>
                       )}
                     </div>
-                    <ul className="list-disc list-outside pl-4 space-y-1 text-xs text-ink-800 leading-relaxed">
+                    <ul className={`list-disc list-outside pl-4 text-ink-800 print:text-black ${
+                      fitToOnePage ? 'space-y-0.5 text-[10.5px] leading-snug' : 'space-y-1 text-xs leading-relaxed'
+                    }`}>
                       {proj.bullets.map((b, bIdx) => (
-                        <li key={bIdx}>
+                        <li key={bIdx} className="group">
                           {isEditing ? (
-                            <textarea
-                              value={b}
-                              onChange={(e) => handleProjectBulletChange(pIdx, bIdx, e.target.value)}
-                              rows={2}
-                              className="w-full text-xs p-1 border border-cobalt-400 rounded focus:outline-none leading-normal"
-                            />
+                            <div className="flex items-start gap-1.5 my-1">
+                              <textarea
+                                value={b}
+                                onChange={(e) => handleProjectBulletChange(pIdx, bIdx, e.target.value)}
+                                rows={2}
+                                className="w-full text-xs p-1 border border-cobalt-400 rounded focus:outline-none leading-normal"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteProjectBullet(pIdx, bIdx)}
+                                className="p-1 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded shrink-0 transition-colors"
+                                title="Delete this bullet to fit on 1 page"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           ) : (
                             <span>{b}</span>
                           )}
                         </li>
                       ))}
                     </ul>
+
+                    {isEditing && (
+                      <button
+                        type="button"
+                        onClick={() => handleAddProjectBullet(pIdx)}
+                        className="flex items-center gap-1 text-[11px] font-semibold text-cobalt-600 hover:text-cobalt-800 pt-1 pl-4"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>Add Project Bullet</span>
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -419,18 +573,18 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
 
           {/* Section: Education */}
           {resume.education && resume.education.length > 0 && (
-            <div className="space-y-1.5">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 pb-0.5">
+            <div className={`resume-section ${fitToOnePage ? 'space-y-1' : 'space-y-1.5'}`}>
+              <h2 className="resume-section-title text-[11px] font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 print:border-black print:text-black pb-0.5">
                 Education
               </h2>
-              <div className="space-y-1 text-xs">
+              <div className={`space-y-0.5 ${fitToOnePage ? 'text-[10.5px]' : 'text-xs space-y-1'}`}>
                 {resume.education.map((edu, eIdx) => (
-                  <div key={eIdx} className="flex justify-between items-baseline text-[11px]">
+                  <div key={eIdx} className="flex justify-between items-baseline">
                     <div>
-                      <span className="font-bold text-ink-950">{edu.degree}</span>
-                      {edu.institution && <span className="text-ink-700">, {edu.institution}</span>}
+                      <span className="font-bold text-ink-950 print:text-black">{edu.degree}</span>
+                      {edu.institution && <span className="text-ink-700 print:text-black">, {edu.institution}</span>}
                     </div>
-                    <span className="text-ink-500 font-mono">
+                    <span className="resume-meta text-ink-500 font-mono print:text-slate-800 print:font-sans">
                       {[edu.location, edu.graduation_year].filter(Boolean).join(' — ')}
                     </span>
                   </div>
@@ -454,19 +608,19 @@ export const ResumeStudioView: React.FC<ResumeStudioViewProps> = ({
             if (validCerts.length === 0) return null;
 
             return (
-              <div className="space-y-1.5">
-                <h2 className="text-xs font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 pb-0.5">
+              <div className={`resume-section ${fitToOnePage ? 'space-y-1' : 'space-y-1.5'}`}>
+                <h2 className="resume-section-title text-[11px] font-bold uppercase tracking-wider text-ink-950 border-b border-ink-300 print:border-black print:text-black pb-0.5">
                   Certifications & Credentials
                 </h2>
-                <ul className="list-disc list-outside pl-4 text-xs text-ink-800 space-y-0.5">
+                <ul className={`list-disc list-outside pl-4 text-ink-800 print:text-black ${fitToOnePage ? 'text-[10px] space-y-0.5' : 'text-xs space-y-0.5'}`}>
                   {validCerts.map((cert, cIdx) => (
                     <li key={cIdx}>
-                      <span className="font-semibold">{cert.name}</span>
+                      <span className="font-semibold text-ink-950 print:text-black">{cert.name}</span>
                       {cert.issuer && !cert.issuer.toLowerCase().includes('n/a') && (
-                        <span className="text-ink-600"> — {cert.issuer}</span>
+                        <span className="text-ink-600 print:text-black"> — {cert.issuer}</span>
                       )}
                       {cert.year && !cert.year.toLowerCase().includes('n/a') && !cert.year.toLowerCase().includes('year') && (
-                        <span className="text-ink-500"> ({cert.year})</span>
+                        <span className="resume-meta text-ink-500 print:text-slate-800 print:font-sans"> ({cert.year})</span>
                       )}
                     </li>
                   ))}

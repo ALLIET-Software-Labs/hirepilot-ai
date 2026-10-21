@@ -92,9 +92,14 @@
   background: #94A3B8;
 }
 
-/* Print Stylesheet for ATS Resume Export */
+/* Print Stylesheet for ATS Resume Export - Strict Executive A4 Standard */
 @media print {
-  /* Hide non-printable UI elements */
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm 10mm 12mm !important;
+  }
+
+  /* Hide all non-printable UI elements */
   nav,
   header,
   footer,
@@ -103,31 +108,148 @@
   .no-print,
   #app-navigation,
   #studio-controls,
-  #local-ai-banner {
+  #local-ai-banner,
+  .print-hide {
     display: none !important;
   }
 
-  body, html {
+  /* Full page isolation: strip all parent padding, margins, shadows, and backgrounds */
+  html,
+  body,
+  #root,
+  #root > div,
+  main,
+  .studio-wrapper,
+  .canvas-wrapper {
     background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
     color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
-    font-size: 11pt !important;
-    line-height: 1.4 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    display: block !important;
+    box-shadow: none !important;
+    border: none !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
+  /* Resume Document Container - Edge-to-Edge Pure White Sheet */
   #resume-document-container {
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
+    border-width: 0 !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
     background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    outline: none !important;
   }
 
-  .page-break {
-    page-break-before: always;
+  /* Strip card styling, shadows, and rounded corners on all children */
+  #resume-document-container * {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Crisp executive header */
+  #resume-document-container h1 {
+    font-size: 20pt !important;
+    font-weight: 800 !important;
+    color: #000000 !important;
+    line-height: 1.1 !important;
+    margin-bottom: 2pt !important;
+    text-align: center !important;
+  }
+
+  #resume-document-container .resume-target-role {
+    font-size: 10.5pt !important;
+    font-weight: 700 !important;
+    color: #000000 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 2.5pt !important;
+    text-align: center !important;
+  }
+
+  #resume-document-container .resume-contact-line {
+    font-size: 9pt !important;
+    color: #222222 !important;
+    margin-top: 1pt !important;
+    text-align: center !important;
+  }
+
+  #resume-document-container .resume-header-border {
+    border-bottom: 1.5pt solid #000000 !important;
+    padding-bottom: 4pt !important;
+    margin-bottom: 5pt !important;
+  }
+
+  /* Section titles with crisp 1pt underline */
+  #resume-document-container h2,
+  #resume-document-container .resume-section-title {
+    font-size: 10pt !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    color: #000000 !important;
+    border-bottom: 1pt solid #000000 !important;
+    margin-top: 6pt !important;
+    margin-bottom: 3pt !important;
+    padding-bottom: 1.5pt !important;
+    background: transparent !important;
+  }
+
+  #resume-document-container .resume-section {
+    margin-bottom: 4pt !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #resume-document-container .resume-entry {
+    margin-bottom: 3.5pt !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #resume-document-container ul {
+    margin-top: 1.5pt !important;
+    margin-bottom: 2pt !important;
+    padding-left: 14pt !important;
+  }
+
+  #resume-document-container li {
+    font-size: 9pt !important;
+    line-height: 1.25 !important;
+    margin-bottom: 1.5pt !important;
+    color: #000000 !important;
+  }
+
+  #resume-document-container p {
+    font-size: 9.2pt !important;
+    line-height: 1.25 !important;
+    margin-bottom: 2pt !important;
+    color: #000000 !important;
+  }
+
+  #resume-document-container .resume-meta {
+    font-size: 8.5pt !important;
+    color: #333333 !important;
+    font-family: var(--font-sans) !important;
+    font-style: italic !important;
+  }
+
+  #resume-document-container span {
+    color: inherit;
   }
 
   /* Ensure text contrast on print */

@@ -31,18 +31,18 @@ def generate_resume_docx(data: Dict[str, Any]) -> io.BytesIO:
     """Generate ATS-friendly DOCX file from structured resume dictionary."""
     doc = Document()
 
-    # Set page margins to standard 0.75 inch (54 pt)
+    # Set page margins to standard 0.45-0.5 inch for strict 1-page fit
     sections = doc.sections
     for section in sections:
-        section.top_margin = Inches(0.75)
-        section.bottom_margin = Inches(0.75)
-        section.left_margin = Inches(0.75)
-        section.right_margin = Inches(0.75)
+        section.top_margin = Inches(0.45)
+        section.bottom_margin = Inches(0.45)
+        section.left_margin = Inches(0.5)
+        section.right_margin = Inches(0.5)
 
     # Base styling
     normal_style = doc.styles['Normal']
     normal_style.font.name = 'Calibri'
-    normal_style.font.size = Pt(10.5)
+    normal_style.font.size = Pt(10)
     normal_style.font.color.rgb = RGBColor(15, 23, 42)
 
     # 1. Header: Candidate Name
@@ -50,9 +50,9 @@ def generate_resume_docx(data: Dict[str, Any]) -> io.BytesIO:
     name_p = doc.add_paragraph()
     name_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     name_p.paragraph_format.space_before = Pt(0)
-    name_p.paragraph_format.space_after = Pt(2)
+    name_p.paragraph_format.space_after = Pt(1)
     name_run = name_p.add_run(candidate_name)
-    name_run.font.size = Pt(20)
+    name_run.font.size = Pt(18)
     name_run.font.bold = True
     name_run.font.color.rgb = RGBColor(15, 23, 42)
 
@@ -62,9 +62,9 @@ def generate_resume_docx(data: Dict[str, Any]) -> io.BytesIO:
         role_p = doc.add_paragraph()
         role_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         role_p.paragraph_format.space_before = Pt(0)
-        role_p.paragraph_format.space_after = Pt(4)
+        role_p.paragraph_format.space_after = Pt(2)
         role_run = role_p.add_run(target_role)
-        role_run.font.size = Pt(11)
+        role_run.font.size = Pt(10)
         role_run.font.bold = True
         role_run.font.color.rgb = RGBColor(37, 99, 235)  # Cobalt accent
 
@@ -85,18 +85,18 @@ def generate_resume_docx(data: Dict[str, Any]) -> io.BytesIO:
         contact_p = doc.add_paragraph()
         contact_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         contact_p.paragraph_format.space_before = Pt(0)
-        contact_p.paragraph_format.space_after = Pt(12)
+        contact_p.paragraph_format.space_after = Pt(6)
         contact_run = contact_p.add_run("  |  ".join(contact_parts))
-        contact_run.font.size = Pt(9.5)
+        contact_run.font.size = Pt(9)
         contact_run.font.color.rgb = RGBColor(71, 85, 105)
 
     def add_section_header(title: str):
         sec_p = doc.add_paragraph()
-        sec_p.paragraph_format.space_before = Pt(12)
-        sec_p.paragraph_format.space_after = Pt(4)
+        sec_p.paragraph_format.space_before = Pt(7)
+        sec_p.paragraph_format.space_after = Pt(2)
         sec_p.paragraph_format.keep_with_next = True
         run = sec_p.add_run(title.upper())
-        run.font.size = Pt(11)
+        run.font.size = Pt(10)
         run.font.bold = True
         run.font.color.rgb = RGBColor(15, 23, 42)
         add_bottom_border(sec_p)
@@ -106,10 +106,10 @@ def generate_resume_docx(data: Dict[str, Any]) -> io.BytesIO:
     if summary:
         add_section_header("Professional Summary")
         p = doc.add_paragraph()
-        p.paragraph_format.space_after = Pt(8)
-        p.paragraph_format.line_spacing = 1.15
+        p.paragraph_format.space_after = Pt(4)
+        p.paragraph_format.line_spacing = 1.12
         run = p.add_run(summary)
-        run.font.size = Pt(10)
+        run.font.size = Pt(9.5)
 
     # 3. Core Competencies & Skills
     skills = data.get("skills", {})
@@ -141,18 +141,18 @@ def generate_resume_docx(data: Dict[str, Any]) -> io.BytesIO:
         for exp in experience:
             # Job Title and Company Header line
             title_p = doc.add_paragraph()
-            title_p.paragraph_format.space_before = Pt(6)
+            title_p.paragraph_format.space_before = Pt(4)
             title_p.paragraph_format.space_after = Pt(1)
             title_p.paragraph_format.keep_with_next = True
 
             role_run = title_p.add_run(exp.get("role", "Role"))
             role_run.bold = True
-            role_run.font.size = Pt(10.5)
+            role_run.font.size = Pt(10)
 
             comp = exp.get("company", "")
             if comp:
                 c_run = title_p.add_run(f" | {comp}")
-                c_run.font.size = Pt(10)
+                c_run.font.size = Pt(9.5)
                 c_run.font.color.rgb = RGBColor(71, 85, 105)
 
             dates = exp.get("dates", "")
@@ -161,10 +161,10 @@ def generate_resume_docx(data: Dict[str, Any]) -> io.BytesIO:
             if meta_parts:
                 meta_p = doc.add_paragraph()
                 meta_p.paragraph_format.space_before = Pt(0)
-                meta_p.paragraph_format.space_after = Pt(3)
+                meta_p.paragraph_format.space_after = Pt(2)
                 meta_p.paragraph_format.keep_with_next = True
                 m_run = meta_p.add_run(" - ".join(meta_parts))
-                m_run.font.size = Pt(9)
+                m_run.font.size = Pt(8.5)
                 m_run.font.italic = True
                 m_run.font.color.rgb = RGBColor(100, 116, 139)
 
@@ -173,42 +173,42 @@ def generate_resume_docx(data: Dict[str, Any]) -> io.BytesIO:
             for bullet in bullets:
                 if bullet.strip():
                     bp = doc.add_paragraph(style='List Bullet')
-                    bp.paragraph_format.space_before = Pt(1)
-                    bp.paragraph_format.space_after = Pt(2)
-                    bp.paragraph_format.line_spacing = 1.15
+                    bp.paragraph_format.space_before = Pt(0.5)
+                    bp.paragraph_format.space_after = Pt(1.5)
+                    bp.paragraph_format.line_spacing = 1.12
                     b_run = bp.add_run(bullet.strip())
-                    b_run.font.size = Pt(9.5)
+                    b_run.font.size = Pt(9)
 
     # 5. Projects
     projects = data.get("projects", [])
     if projects:
-        add_section_header("Key Projects")
+        add_section_header("Key Technical Projects")
         for proj in projects:
             p_head = doc.add_paragraph()
-            p_head.paragraph_format.space_before = Pt(6)
+            p_head.paragraph_format.space_before = Pt(4)
             p_head.paragraph_format.space_after = Pt(1)
             p_head.paragraph_format.keep_with_next = True
 
             p_name = p_head.add_run(proj.get("name", "Project"))
             p_name.bold = True
-            p_name.font.size = Pt(10)
+            p_name.font.size = Pt(9.5)
 
             tech = proj.get("technologies", [])
             tech_str = ", ".join(tech) if isinstance(tech, list) else str(tech)
             if tech_str:
                 t_run = p_head.add_run(f" ({tech_str})")
-                t_run.font.size = Pt(9.5)
+                t_run.font.size = Pt(9)
                 t_run.font.color.rgb = RGBColor(71, 85, 105)
 
             bullets = proj.get("bullets", [])
             for b in bullets:
                 if b.strip():
                     bp = doc.add_paragraph(style='List Bullet')
-                    bp.paragraph_format.space_before = Pt(1)
-                    bp.paragraph_format.space_after = Pt(2)
-                    bp.paragraph_format.line_spacing = 1.15
+                    bp.paragraph_format.space_before = Pt(0.5)
+                    bp.paragraph_format.space_after = Pt(1.5)
+                    bp.paragraph_format.line_spacing = 1.12
                     b_run = bp.add_run(b.strip())
-                    b_run.font.size = Pt(9.5)
+                    b_run.font.size = Pt(9)
 
     # 6. Education
     education = data.get("education", [])
